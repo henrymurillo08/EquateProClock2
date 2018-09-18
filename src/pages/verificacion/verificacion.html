@@ -8,17 +8,17 @@
     </ion-navbar>
   
   </ion-header>
-<ion-content>    
+<ion-content padding>    
     <ion-label>Ingrese el codigo de verificacion</ion-label>
 
   <div class="padre">
       <div class="hijo"><input style=" text-align: center" type="text" maxlength="1" size="3px" [(ngModel)]="valor1"></div>
       <div class="hijo"><input style=" text-align: center" type="text"  maxlength="1" size="3px"[(ngModel)]="valor2"></div>
       <div class="hijo"><input style=" text-align: center" type="text"  maxlength="1" size="3px" [(ngModel)]="valor3"></div>
-      <div class="hijo"><input style=" text-align: center" type="text"  maxlength="1" size="3px" [(ngModel)]="valor4"></div>
+      <div class="hijo"><input style=" text-align: center" type="text"  maxlength="1" size="3px" [(ngModel)]="valor4"></div> 
       <br><br>
       <button ion-button block (click)="verificar()">Verificar</button>
     </div>
-   
+  
  
 </ion-content>

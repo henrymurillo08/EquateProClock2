@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Camera, CameraOptions} from '@ionic-native/camera'
+import { HomePage } from '../home/home';
+import moment from 'moment';
+import 'moment/locale/es';
 
 /**
  * Generated class for the PinPage page.
@@ -28,7 +31,7 @@ export class PinPage {
   public foto:string=null;  
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
-    public toastCtrl: ToastController, public camara:Camera) {
+    public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController) {
     this.conta = 0;
   }
 
@@ -128,11 +131,12 @@ export class PinPage {
       loader.present();
       let numero = this.n1.concat(this.n2, this.n3, this.n4);
       if(numero == this.pin){
-        this.hora = new Date().toLocaleTimeString();
-        this.fecha = new Date().toLocaleDateString();
+        this.fecha = moment().format('LL');
+        this.hora = moment().format('hh:mm a');
         console.log(this.hora);
         console.log(this.fecha);
-        this.getPicture();
+        // this.getPicture();
+        this.presentAlert();
         this.clearAll();
       }else{
         let error = "Datos incorrectos"
@@ -169,6 +173,23 @@ export class PinPage {
     .catch(error =>{
       console.error( error );
     });
+  }
+
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Correcto\n',
+      subTitle: 'Su hora de entrada fue a las: ' + this.hora,
+      buttons: [
+        {
+          text: 'Continuar',
+          role: 'Continuar',
+          handler: () => {
+           this.navCtrl.push(HomePage);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
 

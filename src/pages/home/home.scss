@@ -10,6 +10,12 @@ page-home {
          text-align: center;
     }
 
+    .card-md + ion-card {
+    margin-top: 0;
+    height: 55%;
+    }
+
+
 }
 
 

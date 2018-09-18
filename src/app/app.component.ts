@@ -10,7 +10,7 @@ import { VerificacionPage } from '../pages/verificacion/verificacion';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = VerificacionPage;
+  rootPage:any = PinPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {

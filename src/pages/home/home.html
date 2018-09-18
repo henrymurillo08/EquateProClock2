@@ -9,11 +9,15 @@
 <ion-content class="card-background-page" >
  <br>
   <ion-card>    
-      <ion-datetime disabled class="hora" displayFormat="h:mm A" [(ngModel)]="hora"></ion-datetime>
-      <ion-datetime disabled class="fecha" displayFormat="DDDD MM de MMMM del YYYY" [(ngModel)]="fecha"></ion-datetime>
+      <ion-list>
+        <ion-label class="hora">{{hora}}</ion-label>
+      </ion-list>
+      <ion-list>
+        <ion-label class="fecha">{{fecha}}</ion-label>
+      </ion-list>
   </ion-card>
-  <ion-card paddind >
-    <img src="../../assets/imgs/logo.png">
+  <ion-card>
+    <img style="width:100%; height:100%;" src="../../assets/imgs/logo (2).png">
   </ion-card>
   <button ion-button block (click)="irPinPage()">Usar Pin</button>
 </ion-content>
