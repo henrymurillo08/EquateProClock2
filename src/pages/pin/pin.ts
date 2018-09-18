@@ -135,8 +135,7 @@ export class PinPage {
         this.hora = moment().format('hh:mm a');
         console.log(this.hora);
         console.log(this.fecha);
-        // this.getPicture();
-        this.presentAlert();
+        this.getPicture();
         this.clearAll();
       }else{
         let error = "Datos incorrectos"
@@ -168,7 +167,8 @@ export class PinPage {
     }
     this.camara.getPicture( options )
     .then(imageData => {
-      this.foto = `data:image/jpeg;base64,${imageData}`;
+      this.foto = `data:image/png;base64,${imageData}`;
+      this.presentAlert();
     })
     .catch(error =>{
       console.error( error );
@@ -179,6 +179,7 @@ export class PinPage {
     let alert = this.alertCtrl.create({
       title: 'Correcto\n',
       subTitle: 'Su hora de entrada fue a las: ' + this.hora,
+      message: this.foto,
       buttons: [
         {
           text: 'Continuar',

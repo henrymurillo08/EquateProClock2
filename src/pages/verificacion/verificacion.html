@@ -12,12 +12,12 @@
     <ion-label>Ingrese el codigo de verificacion</ion-label>
 
   <div class="padre">
-      <div class="hijo"><input style=" text-align: center" type="text" maxlength="1" size="3px" [(ngModel)]="valor1"></div>
-      <div class="hijo"><input style=" text-align: center" type="text"  maxlength="1" size="3px"[(ngModel)]="valor2"></div>
-      <div class="hijo"><input style=" text-align: center" type="text"  maxlength="1" size="3px" [(ngModel)]="valor3"></div>
-      <div class="hijo"><input style=" text-align: center" type="text"  maxlength="1" size="3px" [(ngModel)]="valor4"></div> 
+      <div class="hijo"><input style=" text-align: center" id="input1" maxlength="1" size="3px" [(ngModel)]="valor1" onkeyup="if (this.value.length == this.getAttribute('maxlength')) input2.focus()"></div>
+      <div class="hijo"><input style=" text-align: center" id="input2" maxlength="1" size="3px" [(ngModel)]="valor2" onkeyup="if (this.value.length == this.getAttribute('maxlength')) input3.focus()"></div>
+      <div class="hijo"><input style=" text-align: center" id="input3" maxlength="1" size="3px" [(ngModel)]="valor3" onkeyup="if (this.value.length == this.getAttribute('maxlength')) input4.focus()"></div>
+      <div class="hijo"><input style=" text-align: center" id="input4" maxlength="1" size="3px" [(ngModel)]="valor4" onkeyup="if (this.value.length == this.getAttribute('maxlength')) button.focus()"></div>
       <br><br>
-      <button ion-button block (click)="verificar()">Verificar</button>
+      <button ion-button block id="button" (click)="verificar()">Verificar</button>
     </div>
   
  
