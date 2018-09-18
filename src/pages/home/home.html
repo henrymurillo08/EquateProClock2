@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar color="primary" hideBackButton>.
+    <ion-title text-center>
+       {{nombre_empresa}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="card-background-page" >
+ <br>
+  <ion-card>    
+      <ion-datetime disabled class="hora" displayFormat="h:mm A" [(ngModel)]="hora"></ion-datetime>
+      <ion-datetime disabled class="fecha" displayFormat="DDDD MM de MMMM del YYYY" [(ngModel)]="fecha"></ion-datetime>
+  </ion-card>
+  <ion-card paddind >
+    <img src="../../assets/imgs/logo.png">
+  </ion-card>
+  <button ion-button block (click)="irPinPage()">Usar Pin</button>
+</ion-content>
