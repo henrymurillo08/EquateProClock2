@@ -6,6 +6,7 @@ import { HomePage } from '../home/home';
 import moment from 'moment';
 import 'moment/locale/es';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Storage } from '@ionic/storage';
 
 
 /**
@@ -27,15 +28,27 @@ export class PinPage {
   public n3: any;
   public n4: any;
   public conta: any;
-  public pin = 1234;
-  public hora:any
-  public fecha:any;
+  public keys:any;
+  public pin:any = 5678;
+  public horalarga = moment().format('HH:mm');
+  public horacorta = moment().format('hh:mm a');
   public foto:string=null;  
   public latitud:any;
   public longitud:any;
+  public guardardatos = [];
+  public fecha =  moment().format('YYYY-MM-DD');    
+  public datos = {
+    pin:"",
+    longitud:"",
+    latitud:"",
+    entrada:"",
+    salida:"",
+    fecha:""
+  };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
-    public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation) {
+    public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation,
+    public storage: Storage) {
     this.conta = 0;
     this.coordenada();
   }
@@ -108,18 +121,7 @@ export class PinPage {
       this.conta = this.conta - 1;
 
     }
-  }
-
-
-  coordenada(){
-    this.geolocation.getCurrentPosition().then((resp)=> {
-      this.latitud = resp.coords.latitude;
-      this.longitud = resp.coords.longitude;
-    }).catch((error) => {
-      let err = "Error al obtener las coordenadas";
-      this.MostarToast(err);
-    });
-  }
+  } 
 
   clearAll() {
     this.conta = 0;
@@ -146,15 +148,9 @@ export class PinPage {
       loader.present();
       let numero = this.n1.concat(this.n2, this.n3, this.n4);
       if(numero == this.pin){
-        this.fecha = moment().format('YYYY-MM-DD');
-        this.hora = moment().format('HH:mm');
-        console.log(this.latitud);
-        console.log(this.longitud);
-        console.log(this.hora);
-        console.log(this.fecha);
-        this.getPicture();
-        //this.presentAlert();
-        this.clearAll();
+       this.guardar();
+        //this.getPicture();
+        this.presentAlert();
       }else{
         let error = "Datos incorrectos"
         this.MostarToast(error);
@@ -164,6 +160,48 @@ export class PinPage {
       loader.dismiss();
     }
 
+  }
+
+  guardar(){
+
+    this.datos.entrada = this.horalarga
+    this.datos.latitud = this.latitud;
+    this.datos.longitud = this.longitud;
+    this.datos.pin = this.pin;
+    this.datos.fecha =  moment().format('YYYY-MM-DD');    
+
+    this.storage.ready().then(()=>{
+        this.storage.keys().then(data =>{
+          this.keys = data;
+          if(this.keys.includes('usuario')){
+           this.storage.get('usuario').then(val =>{
+             for(let items of val){
+               if(items.pin == this.pin && items.fecha == this.fecha){
+                items.salida = this.horalarga;
+                this.storage.set('usuario', val);
+               }else{
+                this.guardardatos.push(this.datos);
+                this.guardardatos.push(items);
+                this.storage.set('usuario', this.guardardatos);
+               }               
+             }
+           })
+          }else{
+           this.guardardatos.push(this.datos);
+           this.storage.set('usuario', this.guardardatos);
+          }
+        })
+    })
+  }
+
+  coordenada(){
+    this.geolocation.getCurrentPosition().then((resp)=> {
+      this.latitud = resp.coords.latitude;
+      this.longitud = resp.coords.longitude;
+    }).catch((error) => {
+      let err = "Error al obtener las coordenadas";
+      this.MostarToast(err);
+    });
   }
 
   MostarToast(MensajeError: any) {
@@ -195,8 +233,8 @@ export class PinPage {
 
   presentAlert() {
     let alert = this.alertCtrl.create({
-      title: 'Correcto\n',
-      subTitle: 'Su hora de entrada fue a las: ' + this.hora,
+      title: 'Correcto',
+      subTitle: 'Su hora de entrada fue a las: ' + this.horacorta,
       message: this.foto,
       buttons: [
         {
