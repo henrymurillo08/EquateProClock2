@@ -8,6 +8,7 @@ import { HomePage } from '../pages/home/home';
 import { VerificacionPage } from '../pages/verificacion/verificacion';
 import { PinPage } from '../pages/pin/pin';
 import { Camera } from '@ionic-native/camera';
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { Camera } from '@ionic-native/camera';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Camera, 
-    AlertController
+    AlertController, 
+    Geolocation
    
   ]
 })

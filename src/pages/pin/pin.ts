@@ -5,6 +5,8 @@ import { Camera, CameraOptions} from '@ionic-native/camera'
 import { HomePage } from '../home/home';
 import moment from 'moment';
 import 'moment/locale/es';
+import { Geolocation } from '@ionic-native/geolocation';
+
 
 /**
  * Generated class for the PinPage page.
@@ -29,10 +31,13 @@ export class PinPage {
   public hora:any
   public fecha:any;
   public foto:string=null;  
+  public latitud:any;
+  public longitud:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
-    public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController) {
+    public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation) {
     this.conta = 0;
+    this.coordenada();
   }
 
   ionViewDidLoad() {
@@ -106,6 +111,16 @@ export class PinPage {
   }
 
 
+  coordenada(){
+    this.geolocation.getCurrentPosition().then((resp)=> {
+      this.latitud = resp.coords.latitude;
+      this.longitud = resp.coords.longitude;
+    }).catch((error) => {
+      let err = "Error al obtener las coordenadas";
+      this.MostarToast(err);
+    });
+  }
+
   clearAll() {
     this.conta = 0;
     document.getElementById('primero').classList.remove('active');
@@ -131,11 +146,14 @@ export class PinPage {
       loader.present();
       let numero = this.n1.concat(this.n2, this.n3, this.n4);
       if(numero == this.pin){
-        this.fecha = moment().format('LL');
-        this.hora = moment().format('hh:mm a');
+        this.fecha = moment().format('YYYY-MM-DD');
+        this.hora = moment().format('HH:mm');
+        console.log(this.latitud);
+        console.log(this.longitud);
         console.log(this.hora);
         console.log(this.fecha);
         this.getPicture();
+        //this.presentAlert();
         this.clearAll();
       }else{
         let error = "Datos incorrectos"
