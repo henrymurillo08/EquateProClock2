@@ -10,8 +10,7 @@ import { PinPage } from '../pages/pin/pin';
 import { Camera } from '@ionic-native/camera';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
-
-
+import { Device } from '@ionic-native/device';
 
 @NgModule({
   declarations: [
@@ -39,7 +38,8 @@ import { IonicStorageModule } from '@ionic/storage';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Camera, 
     AlertController, 
-    Geolocation
+    Geolocation,
+    Device
    
   ]
 })

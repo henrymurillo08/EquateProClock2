@@ -2,13 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { ToastController } from 'ionic-angular';
-
-/**
- * Generated class for the VerificacionPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Storage } from '@ionic/storage'
+import { Device } from '@ionic-native/device';
 
 @IonicPage()
 @Component({
@@ -22,25 +17,41 @@ export class VerificacionPage {
   public valor3:any;
   public valor4:any;
   public valor:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) { 
+  public dispositivo = {
+      serial:"",
+      plataforma:""
+  }
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController,
+    public storage:Storage, private device: Device ) { 
+      this.datosDispositivo();
     
   }
 
   ionViewDidLoad() {
   
   }
+
+
+  datosDispositivo(){
+    this.dispositivo.serial = this.device.serial;
+    this.dispositivo.plataforma = this.device.platform;
+  }
+ 
   
   verificar(){
   this.valor = this.valor1 + this.valor2 + this.valor3 + this.valor4;
   if(this.valor == this.codigo){
+    this.storage.set('Dispositivo', this.dispositivo);
+    this.storage.set('usuario', 'none');
    this.presentAlert();
   }else{
     let error = "El codigo ingresado es incorrecto"
     this.MostarToast(error);
     this.limpiar();
-  } 
- 
+    }  
   }
+
   limpiar() {
     this.valor1 = "";
     this.valor2 = "";
@@ -62,6 +73,7 @@ export class VerificacionPage {
     let alert = this.alertCtrl.create({
       title: 'Correcto\n',
       subTitle: 'Su codigo fue ingresado correctamente',
+      message: 'serial: ' +  this.dispositivo.serial + ' ' + 'plataforma: ' + this.dispositivo.plataforma,
       buttons: [
         {
           text: 'Continuar',

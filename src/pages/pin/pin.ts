@@ -9,13 +9,6 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
 
 
-/**
- * Generated class for the PinPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-pin',
@@ -29,7 +22,10 @@ export class PinPage {
   public n4: any;
   public conta: any;
   public keys:any;
-  public pin:any = 5678;
+  public numero:any;
+  public pin = [
+    1234, 2345, 3456, 4567
+  ];
   public horalarga = moment().format('HH:mm');
   public horacorta = moment().format('hh:mm a');
   public foto:string=null;  
@@ -56,7 +52,7 @@ export class PinPage {
   ionViewDidLoad() {
   
   }
-  numero(valor: any) {
+  numeros(valor: any) {
     this.conta = this.conta + 1;
     if (this.conta == 1) {
       this.n1 = "" + valor
@@ -146,15 +142,17 @@ export class PinPage {
         content: "verificando datos ...",
       });
       loader.present();
-      let numero = this.n1.concat(this.n2, this.n3, this.n4);
-      if(numero == this.pin){
-       this.guardar();
-        //this.getPicture();
-        this.presentAlert();
-      }else{
-        let error = "Datos incorrectos"
-        this.MostarToast(error);
-        this.clearAll();
+      this.numero = this.n1.concat(this.n2, this.n3, this.n4);
+      for(let pin of this.pin){
+        if(this.numero == pin){
+          this.guardar();
+           //this.getPicture();
+           this.presentAlert();
+         }else{
+           let error = "Datos incorrectos"
+           this.MostarToast(error);
+           this.clearAll();
+         }
       }
       
       loader.dismiss();
@@ -167,30 +165,40 @@ export class PinPage {
     this.datos.entrada = this.horalarga
     this.datos.latitud = this.latitud;
     this.datos.longitud = this.longitud;
-    this.datos.pin = this.pin;
+    this.datos.pin = this.numero;
     this.datos.fecha =  moment().format('YYYY-MM-DD');    
 
     this.storage.ready().then(()=>{
-        this.storage.keys().then(data =>{
-          this.keys = data;
-          if(this.keys.includes('usuario')){
-           this.storage.get('usuario').then(val =>{
-             for(let items of val){
-               if(items.pin == this.pin && items.fecha == this.fecha){
-                items.salida = this.horalarga;
-                this.storage.set('usuario', val);
-               }else{
-                this.guardardatos.push(this.datos);
-                this.guardardatos.push(items);
-                this.storage.set('usuario', this.guardardatos);
-               }               
-             }
-           })
-          }else{
-           this.guardardatos.push(this.datos);
-           this.storage.set('usuario', this.guardardatos);
+      this.storage.get('usuario').then(val =>{
+        let arreglo = [];
+        if(val == 'none'){
+          arreglo.push(this.datos);
+          this.guardardatos = arreglo;
+          this.storage.set('usuario', this.guardardatos);
+        }else{
+          let cont = 0;
+          let posicion = 0;
+          let verificar =0;
+          for(let items of val){
+            if(items.pin == this.numero){
+              posicion = cont;
+              verificar = 1
+            }
+            cont = cont + 1;
           }
-        })
+          if(verificar == 0){
+            arreglo = val;
+            arreglo.push(this.datos);
+            this.guardardatos = arreglo;
+            this.storage.set('usuario', this.guardardatos);
+          }else{
+            val[posicion]['salida'] = this.horalarga;
+            arreglo = val
+            this.guardardatos = arreglo;
+            this.storage.set('usuario', this.guardardatos);
+          }
+        }
+      })
     })
   }
 
