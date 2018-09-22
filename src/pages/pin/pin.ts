@@ -23,6 +23,7 @@ export class PinPage {
   public conta: any;
   public keys:any;
   public numero:any;
+  public estado:any;
   public pin = [
     1234, 2345, 3456, 4567
   ];
@@ -39,7 +40,8 @@ export class PinPage {
     latitud:"",
     entrada:"",
     salida:"",
-    fecha:""
+    fecha:"",
+    estado:""
   };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
@@ -143,16 +145,19 @@ export class PinPage {
       });
       loader.present();
       this.numero = this.n1.concat(this.n2, this.n3, this.n4);
+      let verificar = 0;
       for(let pin of this.pin){
         if(this.numero == pin){
-          this.guardar();
-           //this.getPicture();
-           this.presentAlert();
-         }else{
-           let error = "Datos incorrectos"
-           this.MostarToast(error);
-           this.clearAll();
-         }
+          verificar = 1;          
+         }        
+      }
+      if(verificar == 1){
+        this.guardar();
+         //this.getPicture();
+       }else{
+        let error = "Datos incorrectos"
+        this.MostarToast(error);
+        this.clearAll();
       }
       
       loader.dismiss();
@@ -166,7 +171,9 @@ export class PinPage {
     this.datos.latitud = this.latitud;
     this.datos.longitud = this.longitud;
     this.datos.pin = this.numero;
-    this.datos.fecha =  moment().format('YYYY-MM-DD');    
+    this.datos.fecha =  moment().format('YYYY-MM-DD'); 
+    this.datos.estado = 'entrada';
+ 
 
     this.storage.ready().then(()=>{
       this.storage.get('usuario').then(val =>{
@@ -175,12 +182,13 @@ export class PinPage {
           arreglo.push(this.datos);
           this.guardardatos = arreglo;
           this.storage.set('usuario', this.guardardatos);
+          this.estado = 'entrada';
         }else{
           let cont = 0;
           let posicion = 0;
           let verificar =0;
           for(let items of val){
-            if(items.pin == this.numero){
+            if(items.pin == this.numero && items.fecha == this.fecha){
               posicion = cont;
               verificar = 1
             }
@@ -191,15 +199,21 @@ export class PinPage {
             arreglo.push(this.datos);
             this.guardardatos = arreglo;
             this.storage.set('usuario', this.guardardatos);
+          this.estado = 'entrada';
+
           }else{
             val[posicion]['salida'] = this.horalarga;
+            val[posicion]['estado'] = "salida";
             arreglo = val
             this.guardardatos = arreglo;
             this.storage.set('usuario', this.guardardatos);
+            this.estado = 'salida';
           }
         }
+        this.presentAlert();
       })
     })
+   
   }
 
   coordenada(){
@@ -242,8 +256,7 @@ export class PinPage {
   presentAlert() {
     let alert = this.alertCtrl.create({
       title: 'Correcto',
-      subTitle: 'Su hora de entrada fue a las: ' + this.horacorta,
-      message: this.foto,
+      subTitle: 'Se registro su ' + this.estado + ' a la hora: ' + this.horacorta,
       buttons: [
         {
           text: 'Continuar',
