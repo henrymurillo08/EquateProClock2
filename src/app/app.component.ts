@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -14,7 +14,7 @@ export class MyApp {
   public rootPage: any;
   public keys:any;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public storage:Storage) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public storage: Storage, public alertCtrl: AlertController) {
     platform.ready().then(() => {
     this.storage.ready().then(()=>{
       this.storage.keys().then(data =>{
@@ -29,8 +29,24 @@ export class MyApp {
     })
       statusBar.styleDefault();
       splashScreen.hide();
-      platform.registerBackButtonAction(fn=>{
-        platform.exitApp();
+      platform.registerBackButtonAction(fn => {
+        let alert = this.alertCtrl.create({
+          title: 'Salir de EquateClock',
+          subTitle: 'Desea salir de EquateClock',
+          buttons: [
+            {
+              text: 'Continuar',
+              role: 'Continuar',
+              handler: () => {
+                platform.exitApp();
+              }
+            },
+            {
+              text: 'Cancelar',
+            }
+          ]
+        });
+        alert.present();        
       })
     });
     
