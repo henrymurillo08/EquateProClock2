@@ -18,16 +18,18 @@ export class MyApp {
     this.storage.ready().then(()=>{
       this.storage.keys().then(data =>{
       this.keys = data;
-        if(this.keys.includes('Dispositivo')){
+        if(this.keys.includes('cliente')){
           this.rootPage = TabsPage;
         }else{
           this.rootPage = VerificacionPage;
         }
+
       })
     })
       statusBar.styleDefault();
       splashScreen.hide();
     });
+    
   }
 }
 

@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController,LoadingController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { Device } from '@ionic-native/device';
-
+import { ConexionProvider } from '../../providers/conexion/conexion';
+import { Http } from '@angular/http';
 @IonicPage()
 @Component({
   selector: 'page-verificacion',
   templateUrl: 'verificacion.html',
 })
 export class VerificacionPage {
-  public codigo:any = 'k7v5';
   public valor1:any;
   public valor2:any;
   public valor3:any;
@@ -23,7 +23,7 @@ export class VerificacionPage {
   }
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController,
-    public storage:Storage, private device: Device ) { 
+    public storage:Storage, private device: Device, public conexion:ConexionProvider, public http: Http, public loadingCtrl: LoadingController) { 
       this.datosDispositivo();
     
   }
@@ -41,15 +41,26 @@ export class VerificacionPage {
   
   verificar(){
   this.valor = this.valor1 + this.valor2 + this.valor3 + this.valor4;
-  if(this.valor == this.codigo){
-    this.storage.set('Dispositivo', this.dispositivo);
-    this.storage.set('usuario', 'none');
-   this.presentAlert();
-  }else{
-    let error = "El codigo ingresado es incorrecto"
-    this.MostarToast(error);
-    this.limpiar();
-    }  
+  let direccion = this.conexion.Url + "dispositivos/verifica/" + this.valor;
+  this.http.get(direccion)
+  .map(resp => resp.json())
+  .subscribe(data =>{
+    let loader = this.loadingCtrl.create({
+      content: "verificando codigo ...",
+    });
+    loader.present();
+    if(!data){
+      let err = "El codigo ingresado es incorrecto";
+      this.limpiar();
+      this.MostarToast(err);
+    }else{
+      this.storage.set('Dispositivo', this.dispositivo);
+      this.storage.set('cliente', data);
+      this.storage.set('usuario', 'none');
+      this.presentAlert();
+    }
+    loader.dismiss();
+  })
   }
 
   limpiar() {

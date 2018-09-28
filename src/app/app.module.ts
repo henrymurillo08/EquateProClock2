@@ -4,17 +4,26 @@ import { IonicApp, IonicErrorHandler, IonicModule, AlertController, Ion } from '
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { VerificacionPage } from '../pages/verificacion/verificacion';
-import { PinPage } from '../pages/pin/pin';
-import { Camera } from '@ionic-native/camera';
-import { Geolocation } from '@ionic-native/geolocation';
-import { IonicStorageModule } from '@ionic/storage';
-import { Device } from '@ionic-native/device';
-import { TabsPage } from '../pages/tabs/tabs';
-import { CodigoQrPage } from '../pages/codigo-qr/codigo-qr';
+
+//Providers
+import { ConexionProvider } from '../providers/conexion/conexion';
+
+//Plugins
+import { HttpModule } from '@angular/http';
+import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { NgxQRCodeModule } from 'ngx-qrcode2'
+import { Device } from '@ionic-native/device';
+import { IonicStorageModule } from '@ionic/storage';
+import { Geolocation } from '@ionic-native/geolocation';
+import { Camera } from '@ionic-native/camera';
+
+//Paginas
+import { AdministradorPage } from '../pages/administrador/administrador';
+import { CodigoQrPage } from '../pages/codigo-qr/codigo-qr';
+import { TabsPage } from '../pages/tabs/tabs';
+import { PinPage } from '../pages/pin/pin';
+import { VerificacionPage } from '../pages/verificacion/verificacion';
+import { HomePage } from '../pages/home/home';
 
 
 @NgModule({
@@ -24,13 +33,15 @@ import { NgxQRCodeModule } from 'ngx-qrcode2'
     VerificacionPage,
     PinPage,
     TabsPage,
-    CodigoQrPage
+    CodigoQrPage,
+    AdministradorPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    NgxQRCodeModule
+    NgxQRCodeModule,
+    HttpModule
     
   ],
   bootstrap: [IonicApp],
@@ -40,7 +51,8 @@ import { NgxQRCodeModule } from 'ngx-qrcode2'
     VerificacionPage, 
     PinPage,
     TabsPage,
-    CodigoQrPage
+    CodigoQrPage,
+    AdministradorPage
   ],
   providers: [
     StatusBar,
@@ -50,7 +62,8 @@ import { NgxQRCodeModule } from 'ngx-qrcode2'
     AlertController, 
     Geolocation,
     Device,
-    BarcodeScanner
+    BarcodeScanner,
+    ConexionProvider
    
   ]
 })

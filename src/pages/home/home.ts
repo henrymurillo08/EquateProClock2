@@ -1,26 +1,38 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { PinPage } from '../pin/pin';
+import { NavController, ModalController } from 'ionic-angular';
 import moment from 'moment';
 import 'moment/locale/es';
+import { AdministradorPage } from '../administrador/administrador';
+import { Storage } from '@ionic/storage'
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
   
-  public nombre_empresa:any = "Dimerca";
+  public nombre_empresa:any 
   public fecha:any;
   public hora:any;
 
+  obtenerDatos(){
+    this.storageCrtl.ready().then(() => {
+      this.storageCrtl.get("cliente").then(data => {
+        this.nombre_empresa = data.cliente;
+      })
+    })   
+  }
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, public modalCtrl:ModalController, public storageCrtl:Storage) {
+    this.obtenerDatos();
     this.fecha = moment().format('LL');
     this.hora = moment().format('hh:mm a');
       
   }
-  irPinPage(){
-    this.navCtrl.push(PinPage);
+  configuracion(){
+  const modal = this.modalCtrl.create(AdministradorPage);
+  modal.present();
   }
+
+
 
 }

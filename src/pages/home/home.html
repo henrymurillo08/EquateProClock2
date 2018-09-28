@@ -2,7 +2,12 @@
   <ion-navbar color="primary" hideBackButton>.
     <ion-title text-center>
        {{nombre_empresa}}
-    </ion-title>
+    </ion-title>     
+    <ion-buttons end>
+        <button ion-button icon-only (click)="configuracion()">
+          <ion-icon name="settings"></ion-icon>
+        </button>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
