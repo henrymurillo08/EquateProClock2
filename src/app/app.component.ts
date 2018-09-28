@@ -7,6 +7,7 @@ import { Storage } from '@ionic/storage'
 import { HomePage } from '../pages/home/home';
 import { PinPage } from '../pages/pin/pin';
 import { VerificacionPage } from '../pages/verificacion/verificacion';
+import { TabsPage } from '../pages/tabs/tabs';
 @Component({
   templateUrl: 'app.html'
 })
@@ -20,7 +21,7 @@ export class MyApp {
       this.storage.keys().then(data =>{
       this.keys = data;
         if(this.keys.includes('Dispositivo')){
-          this.rootPage = HomePage;
+          this.rootPage = TabsPage;
         }else{
           this.rootPage = VerificacionPage;
         }

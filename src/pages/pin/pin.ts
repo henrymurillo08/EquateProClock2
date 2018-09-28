@@ -24,6 +24,7 @@ export class PinPage {
   public keys:any;
   public numero:any;
   public estado:any;
+  public tomafoto:boolean = true;
   public pin = [
     1234, 2345, 3456, 4567
   ];
@@ -41,7 +42,9 @@ export class PinPage {
     entrada:"",
     salida:"",
     fecha:"",
-    estado:""
+    estado:"",
+    foto_entrada:"",
+    foto_salida:""
   };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
@@ -152,17 +155,19 @@ export class PinPage {
          }        
       }
       if(verificar == 1){
-        this.guardar();
-         //this.getPicture();
+            if(this.tomafoto){
+              this.getPicture();
+              this.guardar();
+            }else{
+              this.guardar();
+            }        
        }else{
         let error = "Datos incorrectos"
         this.MostarToast(error);
         this.clearAll();
-      }
-      
+      }      
       loader.dismiss();
     }
-
   }
 
   guardar(){
@@ -173,7 +178,7 @@ export class PinPage {
     this.datos.pin = this.numero;
     this.datos.fecha =  moment().format('YYYY-MM-DD'); 
     this.datos.estado = 'entrada';
- 
+    this.datos.foto_entrada = this.foto;
 
     this.storage.ready().then(()=>{
       this.storage.get('usuario').then(val =>{
@@ -203,6 +208,7 @@ export class PinPage {
 
           }else{
             val[posicion]['salida'] = this.horalarga;
+            val[posicion]['foto_salida'] = this.foto;
             val[posicion]['estado'] = "salida";
             arreglo = val
             this.guardardatos = arreglo;
@@ -246,7 +252,6 @@ export class PinPage {
     this.camara.getPicture( options )
     .then(imageData => {
       this.foto = `data:image/png;base64,${imageData}`;
-      this.presentAlert();
     })
     .catch(error =>{
       console.error( error );

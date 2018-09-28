@@ -11,13 +11,18 @@ import { Camera } from '@ionic-native/camera';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
 import { Device } from '@ionic-native/device';
+import { TabsPage } from '../pages/tabs/tabs';
+import { CodigoQrPage } from '../pages/codigo-qr/codigo-qr';
+import { QRScanner } from '@ionic-native/qr-scanner';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     VerificacionPage,
-    PinPage
+    PinPage,
+    TabsPage,
+    CodigoQrPage
   ],
   imports: [
     BrowserModule,
@@ -30,7 +35,9 @@ import { Device } from '@ionic-native/device';
     MyApp,
     HomePage, 
     VerificacionPage, 
-    PinPage
+    PinPage,
+    TabsPage,
+    CodigoQrPage
   ],
   providers: [
     StatusBar,
@@ -39,7 +46,7 @@ import { Device } from '@ionic-native/device';
     Camera, 
     AlertController, 
     Geolocation,
-    Device
+    Device, QRScanner
    
   ]
 })
