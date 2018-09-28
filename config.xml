@@ -91,4 +91,5 @@
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-qrscanner" spec="^2.6.0" />
     <engine name="android" spec="~7.0.0" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="^8.0.0" />
 </widget>

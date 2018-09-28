@@ -13,7 +13,9 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Device } from '@ionic-native/device';
 import { TabsPage } from '../pages/tabs/tabs';
 import { CodigoQrPage } from '../pages/codigo-qr/codigo-qr';
-import { QRScanner } from '@ionic-native/qr-scanner';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { NgxQRCodeModule } from 'ngx-qrcode2'
+
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { QRScanner } from '@ionic-native/qr-scanner';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    NgxQRCodeModule
     
   ],
   bootstrap: [IonicApp],
@@ -46,7 +49,8 @@ import { QRScanner } from '@ionic-native/qr-scanner';
     Camera, 
     AlertController, 
     Geolocation,
-    Device, QRScanner
+    Device,
+    BarcodeScanner
    
   ]
 })
