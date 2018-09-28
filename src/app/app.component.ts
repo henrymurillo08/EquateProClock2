@@ -4,8 +4,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage'
 
-import { HomePage } from '../pages/home/home';
-import { PinPage } from '../pages/pin/pin';
 import { VerificacionPage } from '../pages/verificacion/verificacion';
 import { TabsPage } from '../pages/tabs/tabs';
 @Component({

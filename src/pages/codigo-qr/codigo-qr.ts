@@ -20,7 +20,7 @@ export class CodigoQrPage {
     this.creandoQr = this.dataqr
   }
 
-  escaneraQR(){
+  escanearQR(){
     this.barcodeScanner.scan().then(barcodeData =>{
       this.escaneandoQr = barcodeData.text;
     })
