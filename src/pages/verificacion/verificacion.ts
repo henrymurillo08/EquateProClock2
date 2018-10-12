@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController,LoadingController } from 'ionic-angular';
-import { HomePage } from '../home/home';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { Device } from '@ionic-native/device';
 import { ConexionProvider } from '../../providers/conexion/conexion';
 import { Http } from '@angular/http';
+import { TabsPage } from '../tabs/tabs';
 @IonicPage()
 @Component({
   selector: 'page-verificacion',
@@ -90,7 +90,7 @@ export class VerificacionPage {
           text: 'Continuar',
           role: 'Continuar',
           handler: () => {
-            this.navCtrl.push(HomePage);
+            this.navCtrl.push(TabsPage);
           }
         }
       ]
