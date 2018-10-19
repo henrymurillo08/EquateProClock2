@@ -219,7 +219,7 @@ export class PinPage {
         this.presentAlert();
       })
     })
-   
+   this.clearAll();
   }
 
   coordenada(){
