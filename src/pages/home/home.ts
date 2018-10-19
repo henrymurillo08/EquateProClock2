@@ -29,8 +29,7 @@ export class HomePage {
       
   }
   configuracion(){
-  const modal = this.modalCtrl.create(AdministradorPage);
-  modal.present();
+  this.navCtrl.push(AdministradorPage);
   }
 
 

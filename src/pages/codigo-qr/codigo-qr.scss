@@ -2,5 +2,14 @@ page-codigo-qr {
 
     .toolbar-title-md {
         font-size: 50px;
-	}
+    }
+    
+    .item-input ion-input, .item-input ion-textarea {
+    font-size: 3rem;
+}
+
+.button-md{
+        height: 6rem;
+        font-size:3rem; 
+      }   
 }
