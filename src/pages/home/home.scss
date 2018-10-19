@@ -15,6 +15,25 @@ page-home {
     height: 55%;
     }
 
+    .tabs-md{
+        height: 100px !important;
+    }
+    @media screen and (min-width: 800px) and (max-width: 1220px)  {
+        .toolbar-title-md {
+        font-size: 80px;
+        margin-bottom: 40px;
+      }
+   .hora{
+         font-size: 12rem;
+         text-align: center;
+    }
+     .fecha{
+         font-size: 8rem;
+         text-align: center;
+     }
+   
+    }
+
 
 }
 
