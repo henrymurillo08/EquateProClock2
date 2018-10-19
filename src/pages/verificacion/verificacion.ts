@@ -84,7 +84,6 @@ export class VerificacionPage {
     let alert = this.alertCtrl.create({
       title: 'Correcto\n',
       subTitle: 'Su codigo fue ingresado correctamente',
-      message: 'serial: ' +  this.dispositivo.serial + ' ' + 'plataforma: ' + this.dispositivo.plataforma,
       buttons: [
         {
           text: 'Continuar',

@@ -24,7 +24,14 @@ $app-direction: ltr;
 
 //alert-Controller
 $alert-md-head-text-align:center;
+$alert-min-width:700px;
+$alert-button-font-size:45px;
+$alert-md-title-font-size:60px;
+$alert-md-sub-title-font-size:45px;
+$alert-md-button-padding-top:30px;
 
+//toastController
+$toast-md-title-font-size:6rem;
 
 // Named Color Variables
 // --------------------------------------------------

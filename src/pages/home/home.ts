@@ -17,7 +17,7 @@ export class HomePage {
   obtenerDatos(){
     this.storageCrtl.ready().then(() => {
       this.storageCrtl.get("cliente").then(data => {
-        this.nombre_empresa = data.cliente;
+        this.nombre_empresa = data.nombre;
       })
     })   
   }
