@@ -157,7 +157,6 @@ export class PinPage {
       if(verificar == 1){
             if(this.tomafoto){
               this.getPicture();
-              this.guardar();
             }else{
               this.guardar();
             }        
@@ -252,6 +251,7 @@ export class PinPage {
     this.camara.getPicture( options )
     .then(imageData => {
       this.foto = `data:image/png;base64,${imageData}`;
+      this.guardar();
     })
     .catch(error =>{
       console.error( error );
