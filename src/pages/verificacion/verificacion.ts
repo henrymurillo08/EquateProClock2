@@ -57,11 +57,23 @@ export class VerificacionPage {
       this.storage.set('Dispositivo', this.dispositivo);
       this.storage.set('cliente', data);
       this.storage.set('usuario', 'none');
+      this.empleados();
       this.presentAlert();
     }
     loader.dismiss();
   })
   }
+
+
+  empleados(){
+    let direccion =this.conexion.Url + "empleados";
+    this.http.get(direccion)
+    .map(resp => resp.json())
+    .subscribe(data=>{
+      this.storage.set("empleados", data)
+    })
+  }
+
 
   limpiar() {
     this.valor1 = "";

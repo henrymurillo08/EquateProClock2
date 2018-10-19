@@ -25,15 +25,13 @@ export class PinPage {
   public numero:any;
   public estado:any;
   public tomafoto:boolean = true;
-  public pin = [
-    1234, 2345, 3456, 4567
-  ];
   public horalarga = moment().format('HH:mm');
   public horacorta = moment().format('hh:mm a');
   public foto:string=null;  
   public latitud:any;
   public longitud:any;
   public guardardatos = [];
+  public empleados = [];
   public fecha =  moment().format('YYYY-MM-DD');    
   public datos = {
     pin:"",
@@ -47,9 +45,19 @@ export class PinPage {
     foto_salida:""
   };
 
+  obtenerEmpleados() {
+    this.storage.ready().then(() => {
+      this.storage.get("empleados").then(data => {
+        this.empleados = data;
+      })
+    })
+  }
+
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
     public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation,
     public storage: Storage) {
+    this.obtenerEmpleados();
     this.conta = 0;
     this.coordenada();
   }
@@ -149,8 +157,8 @@ export class PinPage {
       loader.present();
       this.numero = this.n1.concat(this.n2, this.n3, this.n4);
       let verificar = 0;
-      for(let pin of this.pin){
-        if(this.numero == pin){
+      for(let item of this.empleados){
+        if(this.numero == item.pin){
           verificar = 1;          
          }        
       }

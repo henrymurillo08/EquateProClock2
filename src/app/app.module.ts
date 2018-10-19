@@ -24,6 +24,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { PinPage } from '../pages/pin/pin';
 import { VerificacionPage } from '../pages/verificacion/verificacion';
 import { HomePage } from '../pages/home/home';
+import { ConfiguracionPage } from "../pages/configuracion/configuracion";
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { HomePage } from '../pages/home/home';
     PinPage,
     TabsPage,
     CodigoQrPage,
-    AdministradorPage
+    AdministradorPage,
+    ConfiguracionPage
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ import { HomePage } from '../pages/home/home';
     PinPage,
     TabsPage,
     CodigoQrPage,
-    AdministradorPage
+    AdministradorPage,
+    ConfiguracionPage
   ],
   providers: [
     StatusBar,

@@ -1,28 +1,26 @@
 <ion-header>
     <ion-navbar color="primary" hideBackButton>.
       <ion-title text-center>
-        Configuracion
+       Administrador
       </ion-title>     
-      <ion-buttons end>
-          <button ion-button icon-only (click)="close()">
-            <ion-icon name="close"></ion-icon>
-          </button>
-        </ion-buttons>
     </ion-navbar>
   </ion-header>
 
 
 <ion-content padding>
+  <p>
+    El usuario y la Contraseña son con las que ingresa en la web
+  </p>
 
       <ion-item>
           <ion-label>Usuario: </ion-label>
-          <ion-input></ion-input>
+          <ion-input [(ngModel)]="User"></ion-input>
        </ion-item>
        <ion-item>
           <ion-label>Contraseña: </ion-label>
-          <ion-input></ion-input>
+          <ion-input [(ngModel)]="Contrasena"></ion-input>
        </ion-item>
        <br>
-       <button ion-button full>Ingresar</button>
+       <button ion-button full (click)="loguear()">Ingresar</button>
 
 </ion-content>
