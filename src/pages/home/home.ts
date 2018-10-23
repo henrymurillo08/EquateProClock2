@@ -12,7 +12,6 @@ export class HomePage {
   
   public nombre_empresa:any 
   public fecha:any;
-  public hora:any;
 
   obtenerDatos(){
     this.storageCrtl.ready().then(() => {
@@ -25,13 +24,16 @@ export class HomePage {
   constructor(public navCtrl: NavController, public modalCtrl:ModalController, public storageCrtl:Storage) {
     this.obtenerDatos();
     this.fecha = moment().format('LL');
-    this.hora = moment().format('hh:mm a');
-      
+    setInterval(this.update, 1000);
   }
   configuracion(){
   this.navCtrl.push(AdministradorPage);
   }
-
+  
+  update() {
+     document.getElementById("hora")
+    .innerHTML = moment().format(' h:mm:ss a');
+}
 
 
 }
