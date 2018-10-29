@@ -1,32 +1,71 @@
 
 <ion-header>
-    <ion-navbar color="primary" hideBackButton>.
-      <ion-title text-center style="font-size:100px">
-          EquateClock
-      </ion-title>  
-    </ion-navbar>  
-  </ion-header>
+  <ion-navbar color="primary" hideBackButton>.
+    <ion-title text-center>
+    EquateClock
+    </ion-title>
 
-<ion-content>    
-        <ion-grid>
-          <ion-row>
-            <ion-col col-1><p></p></ion-col>
-            <ion-col col-10><p>Ingrese el codigo de verificacion para registrar su dispositivo.</p></ion-col>
-            <ion-col col-1><p></p></ion-col>
-          </ion-row>
+  </ion-navbar>
 
-          <ion-row>
-            <ion-col></ion-col>
-           <ion-col><input style=" text-align: center" id="input1" maxlength="1" [(ngModel)]="valor1" onkeyup="if (this.value.length == this.getAttribute('maxlength')) input2.focus()"></ion-col>
-           <ion-col><input style=" text-align: center" id="input2" maxlength="1" [(ngModel)]="valor2" onkeyup="if (this.value.length == this.getAttribute('maxlength')) input3.focus()"></ion-col>
-           <ion-col><input style=" text-align: center" id="input3" maxlength="1" [(ngModel)]="valor3" onkeyup="if (this.value.length == this.getAttribute('maxlength')) input4.focus()"></ion-col>
-           <ion-col><input style=" text-align: center" id="input4" maxlength="1" [(ngModel)]="valor4" onkeyup="if (this.value.length == this.getAttribute('maxlength')) button.focus()"></ion-col>
-           <ion-col></ion-col>
-          </ion-row>
+</ion-header>
 
-          <ion-row>
-            <ion-col> <button ion-button block id="button" (click)="verificar()">Verificar</button></ion-col>
-          </ion-row>
 
-        </ion-grid>
+<ion-content class="background">
+<br>
+    <p>Ingrese su pin de 4 digitos</p>
+
+  <div id="pincode">
+    <div class="table">
+      <div class="cell">
+
+        <div id="fields">
+          <ion-grid>
+            <ion-row>
+              <div col-3 class="numberfield" id="primero"><span></span></div>
+              <div col-3 class="numberfield" id="segundo"><span></span></div>
+              <div col-3 class="numberfield" id="tercero"><span></span></div>
+              <div col-3 class="numberfield" id="cuarto"><span></span></div>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <div id="numbers">
+          <ion-grid>
+            <ion-row>
+              <div col-4><button ion-button (click)="numeros(1)">1</button></div>
+              <div col-4><button ion-button (click)="numeros(2)">2</button></div>
+              <div col-4><button ion-button (click)="numeros(3)">3</button></div>
+            </ion-row>
+            <ion-row>
+              <div col-4><button ion-button (click)="numeros(4)">4</button></div>
+              <div col-4><button ion-button (click)="numeros(5)">5</button></div>
+              <div col-4><button ion-button (click)="numeros(6)">6</button></div>
+            </ion-row>
+            <ion-row>
+              <div col-4><button ion-button (click)="numeros(7)">7</button></div>
+              <div col-4><button ion-button (click)="numeros(8)">8</button></div>
+              <div col-4><button ion-button (click)="numeros(9)">9</button></div>
+            </ion-row>
+
+            <ion-row>
+              <div col-4><button ion-button (click)="clearAll()">
+                  <ion-icon name="trash"></ion-icon>
+                </button></div>
+              <div col-4><button ion-button (click)="numeros(0)">0</button></div>
+              <div col-4><button ion-button (click)="borrar()">
+                  <ion-icon name="backspace"></ion-icon>
+                </button></div>
+            </ion-row>
+            
+
+
+
+          </ion-grid>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
 </ion-content>

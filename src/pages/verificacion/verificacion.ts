@@ -12,11 +12,12 @@ import { TabsPage } from '../tabs/tabs';
   templateUrl: 'verificacion.html',
 })
 export class VerificacionPage {
-  public valor1:any;
-  public valor2:any;
-  public valor3:any;
-  public valor4:any;
   public valor:any;
+  public n1: any;
+  public n2: any;
+  public n3: any;
+  public n4: any;
+  public conta: any;
   public dispositivo = {
       serial:"",
       plataforma:""
@@ -25,11 +26,86 @@ export class VerificacionPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController,
     public storage:Storage, private device: Device, public conexion:ConexionProvider, public http: Http, public loadingCtrl: LoadingController) { 
       this.datosDispositivo();
+      this.conta = 0;
     
   }
 
-  ionViewDidLoad() {
-  
+  numeros(valor: any) {
+    this.conta = this.conta + 1;
+    if (this.conta == 1) {
+      this.n1 = "" + valor
+      var elem = document.getElementById('primero');
+      // agregar clase  
+      elem.classList.add('active');
+    }
+
+    if (this.conta == 2) {
+      this.n2 = "" + valor
+      var elem = document.getElementById('segundo');
+      // agregar clase  
+      elem.classList.add('active');
+    }
+
+    if (this.conta == 3) {
+      this.n3 = "" + valor
+      var elem = document.getElementById('tercero');
+      // agregar clase  
+      elem.classList.add('active');
+    }
+
+    if (this.conta == 4) {
+      this.n4 = "" + valor
+      var elem = document.getElementById('cuarto');
+      // agregar clase  
+      elem.classList.add('active');
+      this.verificar()
+    }
+  }
+  borrar() {
+    if (this.conta >= 0) {
+      if (this.conta == 1) {
+        this.n1 = ""
+        var elem = document.getElementById('primero');
+        // agregar clase  
+        elem.classList.remove('active');
+      }
+
+      if (this.conta == 2) {
+        this.n2 = ""
+        var elem = document.getElementById('segundo');
+        // agregar clase  
+        elem.classList.remove('active');
+      }
+
+      if (this.conta == 3) {
+        this.n3 = ""
+        var elem = document.getElementById('tercero');
+        // agregar clase  
+        elem.classList.remove('active');
+      }
+
+      if (this.conta == 4) {
+        this.n4 = ""
+        var elem = document.getElementById('cuarto');
+        // agregar clase  
+        elem.classList.remove('active');
+      }
+
+      this.conta = this.conta - 1;
+
+    }
+  } 
+
+  clearAll() {
+    this.conta = 0;
+    document.getElementById('primero').classList.remove('active');
+    document.getElementById('segundo').classList.remove('active');
+    document.getElementById('tercero').classList.remove('active');
+    document.getElementById('cuarto').classList.remove('active');
+    this.n1 = ""
+    this.n2 = ""
+    this.n3 = ""
+    this.n4 = ""
   }
 
 
@@ -40,7 +116,7 @@ export class VerificacionPage {
  
   
   verificar(){
-  this.valor = this.valor1 + this.valor2 + this.valor3 + this.valor4;
+  this.valor = this.n1 + this.n2 + this.n3 + this.n4;
   let direccion = this.conexion.Url + "dispositivos/verifica/" + this.valor;
   this.http.get(direccion)
   .map(resp => resp.json())
@@ -51,7 +127,7 @@ export class VerificacionPage {
     loader.present();
     if(!data){
       let err = "El codigo ingresado es incorrecto";
-      this.limpiar();
+      this.clearAll();
       this.MostarToast(err);
     }else{
       this.storage.set('Dispositivo', this.dispositivo);
@@ -75,12 +151,6 @@ export class VerificacionPage {
   }
 
 
-  limpiar() {
-    this.valor1 = "";
-    this.valor2 = "";
-    this.valor3 = "";
-    this.valor4 = "";
-  }
 
   MostarToast(MensajeError: any) {
     let toast = this.toastCtrl.create({
