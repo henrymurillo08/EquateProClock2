@@ -25,6 +25,7 @@ export class PinPage {
   public numero:any;
   public estado:any;
   public tomafoto:boolean = true;
+  public iconoEntrada: string = "<ion-icon name='clock'></ion-icon>";
   public horalarga = moment().format('HH:mm');
   public horacorta = moment().format('hh:mm a');
   public foto:string=null;  
@@ -32,6 +33,7 @@ export class PinPage {
   public longitud:any;
   public guardardatos = [];
   public empleados = [];
+  public nombre:any;
   public fecha =  moment().format('YYYY-MM-DD');    
   public datos = {
     pin:"",
@@ -159,7 +161,8 @@ export class PinPage {
       let verificar = 0;
       for(let item of this.empleados){
         if(this.numero == item.pin){
-          verificar = 1;          
+          verificar = 1;   
+          this.nombre = item.primerNombre + " " + item.segundoNombre + " " + item.primerApellido;       
          }        
       }
       if(verificar == 1){
@@ -269,7 +272,8 @@ export class PinPage {
   presentAlert() {
     let alert = this.alertCtrl.create({
       title: 'Correcto',
-      subTitle: 'Se registro su ' + this.estado + ' a la hora: ' + this.horacorta,
+      subTitle: 'Se registro su ' + this.estado + ' ' + this.nombre + ' a la hora: ' + this.horacorta,
+   
       buttons: [
         {
           text: 'Continuar',
