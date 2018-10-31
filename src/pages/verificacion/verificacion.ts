@@ -6,6 +6,7 @@ import { Device } from '@ionic-native/device';
 import { ConexionProvider } from '../../providers/conexion/conexion';
 import { Http } from '@angular/http';
 import { TabsPage } from '../tabs/tabs';
+import { duration } from 'moment';
 @IonicPage()
 @Component({
   selector: 'page-verificacion',
