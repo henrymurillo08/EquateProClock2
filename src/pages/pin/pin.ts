@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Camera, CameraOptions} from '@ionic-native/camera'
-import { HomePage } from '../home/home';
-import moment from 'moment';
+import moment, { duration } from 'moment';
 import 'moment/locale/es';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
+import { TabsPage } from '../tabs/tabs';
 
 
 @IonicPage()
@@ -59,6 +59,7 @@ export class PinPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
     public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation,
     public storage: Storage) {
+    
     this.obtenerEmpleados();
     this.conta = 0;
     this.coordenada();
@@ -167,7 +168,8 @@ export class PinPage {
       }
       if(verificar == 1){
             if(this.tomafoto){
-              this.getPicture();
+              //this.getPicture();
+              this.guardar();
             }else{
               this.guardar();
             }        
@@ -273,18 +275,26 @@ export class PinPage {
     let alert = this.alertCtrl.create({
       title: 'Correcto',
       subTitle: 'Se registro su ' + this.estado + ' ' + this.nombre + ' a la hora: ' + this.horacorta,
-   
+      
       buttons: [
         {
           text: 'Continuar',
           role: 'Continuar',
           handler: () => {
-           this.navCtrl.push(HomePage);
+           window.location.reload();
           }
         }
       ]
     });
     alert.present();
+  }
+
+  ngOnInit() {
+    setTimeout(() => {
+      // this.navCtrl.popToRoot();
+      // might try this instead
+      window.location.reload()
+    }, 20000);
   }
 
 
