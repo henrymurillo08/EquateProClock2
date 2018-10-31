@@ -12,6 +12,8 @@ export class HomePage {
   
   public nombre_empresa:any 
   public fecha:any;
+  public entradas:any = 15;
+  public salidas:any = 5;
 
   obtenerDatos(){
     this.storageCrtl.ready().then(() => {

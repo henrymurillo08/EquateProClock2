@@ -133,6 +133,7 @@ export class VerificacionPage {
       this.storage.set('Dispositivo', this.dispositivo);
       this.storage.set('cliente', data);
       this.storage.set('usuario', 'none');
+      this.storage.set('registros', 'none');
       this.empleados();
       this.presentAlert();
     }
