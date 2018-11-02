@@ -7,6 +7,9 @@ import 'moment/locale/es';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
 import { TabsPage } from '../tabs/tabs';
+import { ModalController } from 'ionic-angular';
+import { EntradaPage } from '../entrada/entrada';
+import { SalidaPage } from '../salida/salida';
 
 
 @IonicPage()
@@ -21,11 +24,13 @@ export class PinPage {
   public n3: any;
   public n4: any;
   public conta: any;
+  public entradas:any;
+  public salidas:any;
   public keys:any;
   public numero:any;
   public estado:any;
+  public pantallaEstado:any;
   public tomafoto:boolean = true;
-  public iconoEntrada: string = "<ion-icon name='clock'></ion-icon>";
   public horalarga = moment().format('HH:mm');
   public horacorta = moment().format('hh:mm a');
   public foto:string=null;  
@@ -54,13 +59,21 @@ export class PinPage {
       })
     })
   }
+  obtenerRegistros(){
+    this.storage.ready().then(() => {
+      this.storage.get("registros").then(data => {
+        this.entradas = data.entradas;
+        this.salidas = data.salidas;
+      })
+    })   
+  }
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
     public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation,
-    public storage: Storage) {
-    
+    public storage: Storage, public modalCtrl: ModalController) {
     this.obtenerEmpleados();
+    this.obtenerRegistros();
     this.conta = 0;
     this.coordenada();
   }
@@ -200,6 +213,8 @@ export class PinPage {
           this.guardardatos = arreglo;
           this.storage.set('usuario', this.guardardatos);
           this.estado = 'entrada';
+          this.entradas = this.entradas + 1;
+          this.pantallaEstado = EntradaPage;
         }else{
           let cont = 0;
           let posicion = 0;
@@ -217,7 +232,8 @@ export class PinPage {
             this.guardardatos = arreglo;
             this.storage.set('usuario', this.guardardatos);
           this.estado = 'entrada';
-
+          this.entradas = this.entradas + 1;
+          this.pantallaEstado = EntradaPage;
           }else{
             val[posicion]['salida'] = this.horalarga;
             val[posicion]['foto_salida'] = this.foto;
@@ -226,9 +242,17 @@ export class PinPage {
             this.guardardatos = arreglo;
             this.storage.set('usuario', this.guardardatos);
             this.estado = 'salida';
+            this.entradas = this.entradas - 1;
+            this.salidas = this.salidas + 1;
+            this.pantallaEstado = SalidaPage;
           }
         }
-        this.presentAlert();
+        let registro = {
+          entradas:this.entradas,
+          salidas:this.salidas
+        }
+        this.storage.set("registros", registro);
+        this.presentModal(this.pantallaEstado);
       })
     })
    this.clearAll();
@@ -297,5 +321,9 @@ export class PinPage {
     }, 20000);
   }
 
+  presentModal(pantalla) {
+    const modal = this.modalCtrl.create(pantalla,{empleado:this.nombre, estado:this.estado, hora:this.horacorta});
+    modal.present();
+  }
 
 }

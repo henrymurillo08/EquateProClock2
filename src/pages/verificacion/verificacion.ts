@@ -19,6 +19,10 @@ export class VerificacionPage {
   public n3: any;
   public n4: any;
   public conta: any;
+  public registros = {
+    entradas:0,
+    salidas:0
+  }
   public dispositivo = {
       serial:"",
       plataforma:""
@@ -134,7 +138,7 @@ export class VerificacionPage {
       this.storage.set('Dispositivo', this.dispositivo);
       this.storage.set('cliente', data);
       this.storage.set('usuario', 'none');
-      this.storage.set('registros', 'none');
+      this.storage.set('registros', this.registros);
       this.empleados();
       this.presentAlert();
     }

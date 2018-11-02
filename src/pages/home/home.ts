@@ -12,8 +12,9 @@ export class HomePage {
   
   public nombre_empresa:any 
   public fecha:any;
-  public entradas:any = 15;
-  public salidas:any = 5;
+  public entradas:any;
+  public salidas:any;
+ 
 
   obtenerDatos(){
     this.storageCrtl.ready().then(() => {
@@ -22,9 +23,18 @@ export class HomePage {
       })
     })   
   }
+  obtenerRegistros(){
+    this.storageCrtl.ready().then(() => {
+      this.storageCrtl.get("registros").then(data => {
+        this.entradas = data.entradas;
+        this.salidas = data.salidas;
+      })
+    })   
+  }
 
   constructor(public navCtrl: NavController, public modalCtrl:ModalController, public storageCrtl:Storage) {
     this.obtenerDatos();
+    this.obtenerRegistros();
     this.fecha = moment().format('LL');
     setInterval(this.update, 1000);
   }

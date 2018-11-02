@@ -25,7 +25,8 @@ import { PinPage } from '../pages/pin/pin';
 import { VerificacionPage } from '../pages/verificacion/verificacion';
 import { HomePage } from '../pages/home/home';
 import { ConfiguracionPage } from "../pages/configuracion/configuracion";
-
+import { EntradaPage } from '../pages/entrada/entrada';
+import { SalidaPage } from '../pages/salida/salida';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,9 @@ import { ConfiguracionPage } from "../pages/configuracion/configuracion";
     TabsPage,
     CodigoQrPage,
     AdministradorPage,
-    ConfiguracionPage
+    ConfiguracionPage,
+    EntradaPage,
+    SalidaPage
   ],
   imports: [
     BrowserModule,
@@ -55,7 +58,9 @@ import { ConfiguracionPage } from "../pages/configuracion/configuracion";
     TabsPage,
     CodigoQrPage,
     AdministradorPage,
-    ConfiguracionPage
+    ConfiguracionPage,
+    EntradaPage,
+    SalidaPage
   ],
   providers: [
     StatusBar,
