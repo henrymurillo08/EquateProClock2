@@ -6,7 +6,6 @@ import moment, { duration } from 'moment';
 import 'moment/locale/es';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
-import { TabsPage } from '../tabs/tabs';
 import { ModalController } from 'ionic-angular';
 import { EntradaPage } from '../entrada/entrada';
 import { SalidaPage } from '../salida/salida';
@@ -30,33 +29,46 @@ export class PinPage {
   public numero:any;
   public estado:any;
   public pantallaEstado:any;
-  public tomafoto:boolean = true;
-  public horalarga = moment().format('HH:mm');
+  public empleadoId:any;
+  public tomafoto:any;
+  public datosEntradas:any;
+  public datosSalida:any;
   public horacorta = moment().format('hh:mm a');
   public foto:string=null;  
   public latitud:any;
   public longitud:any;
   public guardardatos = [];
   public empleados = [];
-  public nombre:any;
-  public fecha =  moment().format('YYYY-MM-DD');    
-  public datos = {
-    pin:"",
-    longitud:"",
-    latitud:"",
+  public nombre:any; 
+  public entrada = {
+    empleadoId:"",
+    dia:"",
     entrada:"",
-    salida:"",
-    fecha:"",
-    estado:"",
-    foto_entrada:"",
-    foto_salida:""
+    fotoEntrada:"",
+    creadoPor:"",
+    creadoFecha:"",
+    modificadoPor:"",
+    modificadoFecha:""
+  };
+  public salida = {
+    salida: "",
+    fotoSalida: "",
+    modificadoPor: "",
+    modificadoFecha: ""
   };
 
   obtenerEmpleados() {
+    let loader = this.loadingCtrl.create({
+      content: "Cargando empleados..."
+    });
+    loader.present();
     this.storage.ready().then(() => {
       this.storage.get("empleados").then(data => {
         this.empleados = data;
       })
+    })
+    setTimeout(() => {
+      loader.dismiss();
     })
   }
   obtenerRegistros(){
@@ -68,19 +80,33 @@ export class PinPage {
     })   
   }
 
+  obtenerEntradas() {
+    this.storage.ready().then(() => {
+      this.storage.get("entradas").then(data => {
+        this.datosEntradas = data;
+      })
+    })
+  }
+  obtenerSalidas() {
+    this.storage.ready().then(() => {
+      this.storage.get("salidas").then(data => {
+       this.datosSalida = data;
+      })
+    })
+  }
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
     public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation,
     public storage: Storage, public modalCtrl: ModalController) {
     this.obtenerEmpleados();
     this.obtenerRegistros();
+    this.obtenerEntradas();
+    this.obtenerSalidas();
     this.conta = 0;
     this.coordenada();
   }
 
-  ionViewDidLoad() {
-  
-  }
   numeros(valor: any) {
     this.conta = this.conta + 1;
     if (this.conta == 1) {
@@ -176,15 +202,16 @@ export class PinPage {
       for(let item of this.empleados){
         if(this.numero == item.pin){
           verificar = 1;   
-          this.nombre = item.primerNombre + " " + item.segundoNombre + " " + item.primerApellido;       
+          this.nombre = item.primerNombre + " " + item.primerApellido;
+          this.empleadoId = item.empleadoId;     
+          this.tomafoto = item.capturarFoto;  
          }        
       }
       if(verificar == 1){
-            if(this.tomafoto){
-              //this.getPicture();
-              this.guardar();
+            if(this.tomafoto == true){
+              this.guardarEntrada();
             }else{
-              this.guardar();
+            this.guardarEntrada();
             }        
        }else{
         let error = "Datos incorrectos"
@@ -195,68 +222,78 @@ export class PinPage {
     }
   }
 
-  guardar(){
+  guardarEntrada(){    
+    this.entrada.empleadoId = this.empleadoId;
+    this.entrada.dia = moment().format();
+    this.entrada.entrada = moment().format();
+    this.entrada.fotoEntrada = this.tomafoto;
+    this.entrada.creadoPor = this.nombre;
+    this.entrada.creadoFecha = moment().format();
+    this.entrada.modificadoPor = this.nombre;
+    this.entrada.modificadoFecha = moment().format();
 
-    this.datos.entrada = this.horalarga
-    this.datos.latitud = this.latitud;
-    this.datos.longitud = this.longitud;
-    this.datos.pin = this.numero;
-    this.datos.fecha =  moment().format('YYYY-MM-DD'); 
-    this.datos.estado = 'entrada';
-    this.datos.foto_entrada = this.foto;
-
-    this.storage.ready().then(()=>{
-      this.storage.get('usuario').then(val =>{
         let arreglo = [];
-        if(val == 'none'){
-          arreglo.push(this.datos);
+        if (this.datosEntradas == 'none') {
+          arreglo.push(this.entrada);
           this.guardardatos = arreglo;
-          this.storage.set('usuario', this.guardardatos);
+          this.storage.set('entradas', this.guardardatos);
           this.estado = 'entrada';
           this.entradas = this.entradas + 1;
           this.pantallaEstado = EntradaPage;
-        }else{
-          let cont = 0;
-          let posicion = 0;
-          let verificar =0;
-          for(let items of val){
-            if(items.pin == this.numero && items.fecha == this.fecha){
-              posicion = cont;
+        } else {
+          let verificar = 0;
+          for (let items of this.datosEntradas) {
+            if (items.empleadoId == this.empleadoId) {
               verificar = 1
             }
-            cont = cont + 1;
           }
-          if(verificar == 0){
-            arreglo = val;
-            arreglo.push(this.datos);
+          if (verificar == 0) {
+            arreglo = this.datosEntradas;
+            arreglo.push(this.entrada);
             this.guardardatos = arreglo;
-            this.storage.set('usuario', this.guardardatos);
-          this.estado = 'entrada';
-          this.entradas = this.entradas + 1;
-          this.pantallaEstado = EntradaPage;
-          }else{
-            val[posicion]['salida'] = this.horalarga;
-            val[posicion]['foto_salida'] = this.foto;
-            val[posicion]['estado'] = "salida";
-            arreglo = val
-            this.guardardatos = arreglo;
-            this.storage.set('usuario', this.guardardatos);
-            this.estado = 'salida';
-            this.entradas = this.entradas - 1;
-            this.salidas = this.salidas + 1;
-            this.pantallaEstado = SalidaPage;
+            this.storage.set('entradas', this.guardardatos);
+            this.estado = 'entrada';
+            this.entradas = this.entradas + 1;
+            this.pantallaEstado = EntradaPage;
+          } else {
+            this.salida.salida = moment().format();
+            this.salida.fotoSalida = this.tomafoto;
+            this.salida.modificadoPor = this.nombre;
+            this.salida.modificadoFecha = moment().format();
+            let salidaFinal = {
+              empleadoId: this.empleadoId,
+              salida:this.salida
+            }
+
+              let arreglo2 = [];
+              if (this.datosSalida == 'none') {
+                arreglo2.push(salidaFinal);
+                this.guardardatos = arreglo2;
+                this.storage.set('salidas', this.guardardatos);
+                this.estado = 'salida';
+                this.salidas = this.salidas + 1;
+                this.entradas = this.entradas - 1;
+                this.pantallaEstado = SalidaPage;
+              } else {
+                arreglo2 = this.datosSalida ;
+                arreglo2.push(salidaFinal);
+                this.guardardatos = arreglo2;
+                this.storage.set('salidas', this.guardardatos);
+                this.estado = 'salida';
+                this.salidas = this.salidas + 1;
+                this.entradas = this.entradas - 1;
+                this.pantallaEstado = SalidaPage;
+              }
           }
         }
         let registro = {
-          entradas:this.entradas,
-          salidas:this.salidas
+          entradas: this.entradas,
+          salidas: this.salidas
         }
-        this.storage.set("registros", registro);
+        this.storage.set('registros', registro)
         this.presentModal(this.pantallaEstado);
-      })
-    })
-   this.clearAll();
   }
+
 
   coordenada(){
     this.geolocation.getCurrentPosition().then((resp)=> {
@@ -288,37 +325,11 @@ export class PinPage {
     this.camara.getPicture( options )
     .then(imageData => {
       this.foto = `data:image/png;base64,${imageData}`;
-      this.guardar();
+      this.guardarEntrada();
     })
     .catch(error =>{
       console.error( error );
     });
-  }
-
-  presentAlert() {
-    let alert = this.alertCtrl.create({
-      title: 'Correcto',
-      subTitle: 'Se registro su ' + this.estado + ' ' + this.nombre + ' a la hora: ' + this.horacorta,
-      
-      buttons: [
-        {
-          text: 'Continuar',
-          role: 'Continuar',
-          handler: () => {
-           window.location.reload();
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
-  ngOnInit() {
-    setTimeout(() => {
-      // this.navCtrl.popToRoot();
-      // might try this instead
-      window.location.reload()
-    }, 20000);
   }
 
   presentModal(pantalla) {

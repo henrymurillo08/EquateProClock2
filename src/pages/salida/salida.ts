@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the SalidaPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { LoadingController } from 'ionic-angular';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -18,16 +13,17 @@ export class SalidaPage {
   public estado:any;
   public hora:any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController) {
     this.empleado = this.navParams.get('empleado');
     this.estado = this.navParams.get('estado');
     this.hora = this.navParams.get('hora');
     this.ngOnInit();
   }
 
-  ngOnInit() {
+  ngOnInit(){
     setTimeout(() => {
-      window.location.reload()
+      this.navCtrl.push(TabsPage);
     }, 3000);
   }
+
 }

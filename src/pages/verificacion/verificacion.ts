@@ -63,7 +63,14 @@ export class VerificacionPage {
       var elem = document.getElementById('cuarto');
       // agregar clase  
       elem.classList.add('active');
+      let loader = this.loadingCtrl.create({
+        content: "verificando codigo ..."
+      });
+      loader.present();
       this.verificar()
+      setTimeout(() => {
+        loader.dismiss();
+      }, 3000)
     }
   }
   borrar() {
@@ -126,10 +133,6 @@ export class VerificacionPage {
   this.http.get(direccion)
   .map(resp => resp.json())
   .subscribe(data =>{
-    let loader = this.loadingCtrl.create({
-      content: "verificando codigo ...",
-    });
-    loader.present();
     if(!data){
       let err = "El codigo ingresado es incorrecto";
       this.clearAll();
@@ -137,12 +140,12 @@ export class VerificacionPage {
     }else{
       this.storage.set('Dispositivo', this.dispositivo);
       this.storage.set('cliente', data);
-      this.storage.set('usuario', 'none');
       this.storage.set('registros', this.registros);
+      this.storage.set('entradas', 'none');
+      this.storage.set('salidas', 'none');
       this.empleados();
       this.presentAlert();
-    }
-    loader.dismiss();
+    }   
   })
   }
 

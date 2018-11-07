@@ -16,6 +16,7 @@ import { Device } from '@ionic-native/device';
 import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Camera } from '@ionic-native/camera';
+import { Network } from '@ionic-native/network';
 
 //Paginas
 import { AdministradorPage } from '../pages/administrador/administrador';
@@ -71,7 +72,8 @@ import { SalidaPage } from '../pages/salida/salida';
     Geolocation,
     Device,
     BarcodeScanner,
-    ConexionProvider
+    ConexionProvider,
+    Network
    
   ]
 })
