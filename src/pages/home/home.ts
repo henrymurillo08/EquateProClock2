@@ -8,7 +8,6 @@ import { Network } from '@ionic-native/network';
 import { ConexionProvider } from '../../providers/conexion/conexion';
 import { Http } from '@angular/http';
 import { Observable } from 'Rxjs/rx';
-import { Subscription } from "rxjs/Subscription";
 
 @Component({
   selector: 'page-home',
@@ -22,13 +21,16 @@ export class HomePage {
   public entradas:any;
   public salidas:any;
   public TipoConexion: any;
+  public companiaid:any;
   public datosEntradas:any;
   public datosSalida:any;
+  public datosEmpleados = [];
 
   obtenerDatos(){
     this.storageCrtl.ready().then(() => {
       this.storageCrtl.get("cliente").then(data => {
         this.nombre_empresa = data.nombre;
+        this.companiaid = data.companiaId
       })
     })   
   }
@@ -66,6 +68,8 @@ export class HomePage {
     Observable.interval(1000).subscribe(() => {
       this.horaActual();
     });
+    this.sincrinizar();
+    
 
   }
   configuracion(){
@@ -74,32 +78,67 @@ export class HomePage {
   
 horaActual(){
   this.hora = moment().format('hh:mm ss a');
+    
+  if (this.hora == '06:14 25 pm'){
+   this.empleados();
+     }
+
 }
 
-sincronizarDatos(){
+
+  empleados() {
+    let direccion = this.conexion.Url + "empleados";
+    this.http.get(direccion)
+      .map(resp => resp.json())
+      .subscribe(data => {
+        for (let item of data) {
+          if (item.companiaId == 2) {
+            this.datosEmpleados.push(item);
+          }
+        }
+        this.storageCrtl.set('empleados', this.datosEmpleados);
+      })
+  }
+
+
+sincronizarEntrada(){
  this.TipoConexion = this.networkCtrl.type;
   if(this.TipoConexion != 'null'){
     let direccion = this.conexion.Url + "tiempo/empleado/";
-    for(let items of this.datosEntradas){
-      this.http.post(direccion, items)
-        .subscribe(respuesta => {
-          let valor = respuesta.json;
-          console.log(valor);
-        })
-    }  
-    
-    for (let items2 of this.datosSalida) {
-      let direccion2 = this.conexion.Url + "tiempo/empleado/" + items2.empleadoId;
-      this.http.patch(direccion2, items2.salida)
-        .subscribe(respuesta => {
-          let valor = respuesta.json;
-          console.log(valor);
-        })
-    }  
-
-
+    if(this.datosEntradas != 'none'){
+      for (let items of this.datosEntradas) {
+        this.http.post(direccion, items)
+          .subscribe(respuesta => {
+            let valor = respuesta.json;
+          })
+      }  
+    }
+    this.storageCrtl.set('entradas', 'none')
   }
 }
+
+  sincronizarSalida() {
+    this.TipoConexion = this.networkCtrl.type;
+    if (this.TipoConexion != 'null') {
+      if (this.datosSalida != 'none') {
+        for (let items2 of this.datosSalida) {
+          let direccion2 = this.conexion.Url + "tiempo/empleado/" + items2.empleadoId;
+          this.http.patch(direccion2, items2.salida)
+            .subscribe(respuesta => {
+              let valor = respuesta.json;
+            })
+        }
+      }
+      this.storageCrtl.set('salidas', 'none')
+    }
+  }
+
+  sincrinizar(){
+    setTimeout(() => {
+      this.sincronizarEntrada();
+      this.sincronizarSalida();
+    }, 120000);
+  }
 
 
 }

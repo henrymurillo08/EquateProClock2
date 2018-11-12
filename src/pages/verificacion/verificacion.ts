@@ -19,6 +19,8 @@ export class VerificacionPage {
   public n3: any;
   public n4: any;
   public conta: any;
+  public companiaid:any;
+  public datosEmpleados = [];
   public registros = {
     entradas:0,
     salidas:0
@@ -138,6 +140,7 @@ export class VerificacionPage {
       this.clearAll();
       this.MostarToast(err);
     }else{
+      this.companiaid = data.companiaId;
       this.storage.set('Dispositivo', this.dispositivo);
       this.storage.set('cliente', data);
       this.storage.set('registros', this.registros);
@@ -155,7 +158,12 @@ export class VerificacionPage {
     this.http.get(direccion)
     .map(resp => resp.json())
     .subscribe(data=>{
-      this.storage.set("empleados", data)
+     for(let item of data){
+        if(item.companiaId == this.companiaid){
+          this.datosEmpleados.push(item);
+        }
+     }
+     this.storage.set('empleados', this.datosEmpleados);
     })
   }
 

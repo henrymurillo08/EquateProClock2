@@ -103,7 +103,7 @@ export class PinPage {
     this.obtenerRegistros();
     this.obtenerEntradas();
     this.obtenerSalidas();
-    this.conta = 0;
+    this.conta = navParams.data
     this.coordenada();
   }
 
@@ -111,30 +111,18 @@ export class PinPage {
     this.conta = this.conta + 1;
     if (this.conta == 1) {
       this.n1 = "" + valor
-      var elem = document.getElementById('primero');
-      // agregar clase  
-      elem.classList.add('active');
     }
 
     if (this.conta == 2) {
       this.n2 = "" + valor
-      var elem = document.getElementById('segundo');
-      // agregar clase  
-      elem.classList.add('active');
     }
 
     if (this.conta == 3) {
       this.n3 = "" + valor
-      var elem = document.getElementById('tercero');
-      // agregar clase  
-      elem.classList.add('active');
     }
 
     if (this.conta == 4) {
       this.n4 = "" + valor
-      var elem = document.getElementById('cuarto');
-      // agregar clase  
-      elem.classList.add('active');
       this.Login()
     }
   }
@@ -291,6 +279,7 @@ export class PinPage {
           salidas: this.salidas
         }
         this.storage.set('registros', registro)
+        this.clearAll();
         this.presentModal(this.pantallaEstado);
   }
 
