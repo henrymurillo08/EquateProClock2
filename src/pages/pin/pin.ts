@@ -33,6 +33,7 @@ export class PinPage {
   public tomafoto:any;
   public datosEntradas:any;
   public datosSalida:any;
+  public fecha:any;
   public horacorta = moment().format('hh:mm a');
   public foto:string=null;  
   public latitud:any;
@@ -212,13 +213,13 @@ export class PinPage {
 
   guardarEntrada(){    
     this.entrada.empleadoId = this.empleadoId;
-    this.entrada.dia = moment().format();
-    this.entrada.entrada = moment().format();
+    this.entrada.dia = moment().format("YYYY-mm-dd");
+    this.entrada.entrada = moment().format("MM/DD/YYYY hh:mm a");
     this.entrada.fotoEntrada = this.tomafoto;
     this.entrada.creadoPor = this.nombre;
-    this.entrada.creadoFecha = moment().format();
+    this.entrada.creadoFecha = moment().format("YYYY-mm-dd hh:mm a");
     this.entrada.modificadoPor = this.nombre;
-    this.entrada.modificadoFecha = moment().format();
+    this.entrada.modificadoFecha = moment().format("YYYY-mm-dd hh:mm a");
 
         let arreglo = [];
         if (this.datosEntradas == 'none') {
@@ -244,10 +245,10 @@ export class PinPage {
             this.entradas = this.entradas + 1;
             this.pantallaEstado = EntradaPage;
           } else {
-            this.salida.salida = moment().format();
+            this.salida.salida = moment().format("MM/DD/YYYY hh:mm a");
             this.salida.fotoSalida = this.tomafoto;
             this.salida.modificadoPor = this.nombre;
-            this.salida.modificadoFecha = moment().format();
+            this.salida.modificadoFecha = moment().format("YYYY-mm-dd hh:mm a");
             let salidaFinal = {
               empleadoId: this.empleadoId,
               salida:this.salida
@@ -307,8 +308,8 @@ export class PinPage {
   getPicture(){
     let options: CameraOptions = {
       destinationType: this.camara.DestinationType.DATA_URL,
-      targetWidth: 1000,
-      targetHeight: 1000,
+      targetWidth: 400,
+      targetHeight: 400,
       quality: 100
     }
     this.camara.getPicture( options )
