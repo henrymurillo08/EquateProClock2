@@ -22,8 +22,8 @@ export class HomePage {
   public salidas:any;
   public TipoConexion: any;
   public companiaid:any;
-  public datosEntradas:any;
-  public datosSalida:any;
+  public datosEntradas = [];
+  public datosSalida = [];
   public datosEmpleados = [];
 
   obtenerDatos(){
@@ -42,20 +42,7 @@ export class HomePage {
       })
     })   
   }
-  obtenerEntradas() {
-    this.storageCrtl.ready().then(() => {
-      this.storageCrtl.get("entradas").then(data => {
-        this.datosEntradas = data;
-      })
-    })
-  }
-  obtenerSalidas() {
-    this.storageCrtl.ready().then(() => {
-      this.storageCrtl.get("salidas").then(data => {
-        this.datosSalida = data;
-      })
-    })
-  }
+  
 
 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public storageCrtl: Storage, private networkCtrl: Network,
@@ -68,21 +55,35 @@ export class HomePage {
     Observable.interval(1000).subscribe(() => {
       this.horaActual();
     });
-    this.sincrinizar();
-    
-
   }
+  
+  obtenerEntradas() {
+    this.storageCrtl.ready().then(() => {
+      this.storageCrtl.get("entradas").then(data => {
+        this.datosEntradas = data;
+        this.sincronizarEntrada();
+      })
+    })
+  }
+
+  obtenerSalidas() {
+    this.storageCrtl.ready().then(() => {
+      this.storageCrtl.get("salidas").then(data => {
+        this.datosSalida = data;
+        this.sincronizarSalida();
+      })
+    })
+  }
+
   configuracion(){
   this.navCtrl.push(AdministradorPage);
   }
   
 horaActual(){
-  this.hora = moment().format('hh:mm ss a');
-    
+  this.hora = moment().format('hh:mm ss a');    
   if (this.hora == '06:14 25 pm'){
    this.empleados();
      }
-
 }
 
 
@@ -100,27 +101,32 @@ horaActual(){
       })
   }
 
-
-sincronizarEntrada(){
- this.TipoConexion = this.networkCtrl.type;
-  if(this.TipoConexion != 'null'){
-    let direccion = this.conexion.Url + "tiempo/empleado/";
-    if(this.datosEntradas != 'none'){
-      for (let items of this.datosEntradas) {
-        this.http.post(direccion, items)
-          .subscribe(respuesta => {
-            let valor = respuesta.json;
+  sincronizarEntrada() {
+    this.TipoConexion = this.networkCtrl.type;
+    if (this.TipoConexion != 'null') {
+      if (this.datosEntradas.length > 0) {
+        for(let item of this.datosEntradas) {
+          let verificar = this.conexion.Url + "tiempo/empleado/" + item.empleadoId;
+          this.http.get(verificar)
+            .map(res => res.json())
+            .subscribe(respuesta => {
+              if(!respuesta){
+                let direccion = this.conexion.Url + "tiempo/empleado/";
+                this.http.post(direccion, item.entrada)
+                .subscribe(respuesta => {
+                let valor2 = respuesta.json;
+              })
+            }
           })
-      }  
+        }
+      } 
     }
-    this.storageCrtl.set('entradas', 'none')
   }
-}
 
   sincronizarSalida() {
     this.TipoConexion = this.networkCtrl.type;
     if (this.TipoConexion != 'null') {
-      if (this.datosSalida != 'none') {
+      if (this.datosSalida.length > 0) {
         for (let items2 of this.datosSalida) {
           let direccion2 = this.conexion.Url + "tiempo/empleado/" + items2.empleadoId;
           this.http.patch(direccion2, items2.salida)
@@ -129,16 +135,7 @@ sincronizarEntrada(){
             })
         }
       }
-      this.storageCrtl.set('salidas', 'none')
     }
   }
-
-  sincrinizar(){
-    setTimeout(() => {
-      this.sincronizarEntrada();
-      this.sincronizarSalida();
-    }, 120000);
-  }
-
 
 }

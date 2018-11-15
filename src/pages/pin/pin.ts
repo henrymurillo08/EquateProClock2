@@ -31,8 +31,8 @@ export class PinPage {
   public pantallaEstado:any;
   public empleadoId:any;
   public tomafoto:any;
-  public datosEntradas:any;
-  public datosSalida:any;
+  public datosEntradas =[];
+  public datosSalida= [];
   public fecha:any;
   public horacorta = moment().format('hh:mm a');
   public foto:string=null;  
@@ -45,7 +45,13 @@ export class PinPage {
     empleadoId:"",
     dia:"",
     entrada:"",
-    fotoEntrada:"",
+    horas:0,
+    precio:0,
+    total:0,
+    fotoEntrada: false,
+    fotosalida: false,
+    manualEntrada:false,
+    manualsalida: false,
     creadoPor:"",
     creadoFecha:"",
     modificadoPor:"",
@@ -212,18 +218,22 @@ export class PinPage {
   }
 
   guardarEntrada(){    
+   
     this.entrada.empleadoId = this.empleadoId;
-    this.entrada.dia = moment().format("YYYY-mm-dd");
+    this.entrada.dia = moment().format("YYYY-MM-DD");
     this.entrada.entrada = moment().format("MM/DD/YYYY hh:mm a");
     this.entrada.fotoEntrada = this.tomafoto;
     this.entrada.creadoPor = this.nombre;
-    this.entrada.creadoFecha = moment().format("YYYY-mm-dd hh:mm a");
+    this.entrada.creadoFecha = moment().format("YYYY-MM-DD hh:mm a");
     this.entrada.modificadoPor = this.nombre;
-    this.entrada.modificadoFecha = moment().format("YYYY-mm-dd hh:mm a");
-
+    this.entrada.modificadoFecha = moment().format("YYYY-MM-DD hh:mm a");
+    let entradaFinal = {
+      empleadoId: this.empleadoId,
+      entrada:this.entrada
+    }
         let arreglo = [];
-        if (this.datosEntradas == 'none') {
-          arreglo.push(this.entrada);
+        if (this.datosEntradas.length == 0) {
+          arreglo.push(entradaFinal);
           this.guardardatos = arreglo;
           this.storage.set('entradas', this.guardardatos);
           this.estado = 'entrada';
@@ -238,7 +248,7 @@ export class PinPage {
           }
           if (verificar == 0) {
             arreglo = this.datosEntradas;
-            arreglo.push(this.entrada);
+            arreglo.push(entradaFinal);
             this.guardardatos = arreglo;
             this.storage.set('entradas', this.guardardatos);
             this.estado = 'entrada';
@@ -248,14 +258,14 @@ export class PinPage {
             this.salida.salida = moment().format("MM/DD/YYYY hh:mm a");
             this.salida.fotoSalida = this.tomafoto;
             this.salida.modificadoPor = this.nombre;
-            this.salida.modificadoFecha = moment().format("YYYY-mm-dd hh:mm a");
+            this.salida.modificadoFecha = moment().format("YYYY-MM-DD hh:mm a");
             let salidaFinal = {
               empleadoId: this.empleadoId,
               salida:this.salida
             }
 
               let arreglo2 = [];
-              if (this.datosSalida == 'none') {
+              if (this.datosSalida.length == 0) {
                 arreglo2.push(salidaFinal);
                 this.guardardatos = arreglo2;
                 this.storage.set('salidas', this.guardardatos);

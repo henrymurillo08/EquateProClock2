@@ -144,8 +144,8 @@ export class VerificacionPage {
       this.storage.set('Dispositivo', this.dispositivo);
       this.storage.set('cliente', data);
       this.storage.set('registros', this.registros);
-      this.storage.set('entradas', 'none');
-      this.storage.set('salidas', 'none');
+      this.storage.set('entradas', '');
+      this.storage.set('salidas', '');
       this.empleados();
       this.presentAlert();
     }   
