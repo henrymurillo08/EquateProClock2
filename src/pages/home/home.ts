@@ -105,19 +105,22 @@ horaActual(){
     this.TipoConexion = this.networkCtrl.type;
     if (this.TipoConexion != 'null') {
       if (this.datosEntradas.length > 0) {
+        let cont = 0;
         for(let item of this.datosEntradas) {
-          let verificar = this.conexion.Url + "tiempo/empleado/" + item.empleadoId;
-          this.http.get(verificar)
+          console.log(cont);
+           let verificar = this.conexion.Url + "tiempo/empleado/" + item.empleadoId;
+           this.http.get(verificar)
             .map(res => res.json())
             .subscribe(respuesta => {
-              if(!respuesta){
-                let direccion = this.conexion.Url + "tiempo/empleado/";
-                this.http.post(direccion, item.entrada)
-                .subscribe(respuesta => {
-                let valor2 = respuesta.json;
-              })
+             if(!respuesta && item.estado == 'noEnviado'){
+               let direccion = this.conexion.Url + "tiempo/empleado/";
+               this.http.post(direccion, item.entrada)
+              .subscribe(respuesta => {       
+               })
             }
-          })
+           })
+          this.actualizarRegistros(cont);  
+          cont++
         }
       } 
     }
@@ -136,6 +139,16 @@ horaActual(){
         }
       }
     }
+  }
+
+
+  actualizarRegistros(numero){
+    this.storageCrtl.ready().then(() => {
+      this.storageCrtl.get("entradas").then(data => {
+      data[numero]['estado'] = 'enviado';
+      this.storageCrtl.set("entradas", data)
+      })
+    })
   }
 
 }

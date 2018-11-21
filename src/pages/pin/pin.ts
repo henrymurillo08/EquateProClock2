@@ -65,19 +65,13 @@ export class PinPage {
   };
 
   obtenerEmpleados() {
-    let loader = this.loadingCtrl.create({
-      content: "Cargando empleados..."
-    });
-    loader.present();
     this.storage.ready().then(() => {
       this.storage.get("empleados").then(data => {
         this.empleados = data;
       })
     })
-    setTimeout(() => {
-      loader.dismiss();
-    })
   }
+  
   obtenerRegistros(){
     this.storage.ready().then(() => {
       this.storage.get("registros").then(data => {
@@ -204,7 +198,7 @@ export class PinPage {
       }
       if(verificar == 1){
             if(this.tomafoto == true){
-              this.guardarEntrada();
+             this.getPicture();
             }else{
             this.guardarEntrada();
             }        
@@ -213,7 +207,9 @@ export class PinPage {
         this.MostarToast(error);
         this.clearAll();
       }      
-      loader.dismiss();
+      setTimeout(() => {
+        loader.dismiss();
+      }, 3000);
     }
   }
 
@@ -229,6 +225,7 @@ export class PinPage {
     this.entrada.modificadoFecha = moment().format("YYYY-MM-DD hh:mm a");
     let entradaFinal = {
       empleadoId: this.empleadoId,
+      estado:'noEnviado',
       entrada:this.entrada
     }
         let arreglo = [];

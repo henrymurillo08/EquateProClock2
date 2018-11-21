@@ -154,14 +154,16 @@ export class VerificacionPage {
 
 
   empleados(){
+    let cont = 0;
     let direccion =this.conexion.Url + "empleados";
     this.http.get(direccion)
     .map(resp => resp.json())
     .subscribe(data=>{
      for(let item of data){
-        if(item.companiaId == this.companiaid){
+        if(item.companiaId == this.companiaid && cont < 300){
           this.datosEmpleados.push(item);
         }
+        cont++;
      }
      this.storage.set('empleados', this.datosEmpleados);
     })

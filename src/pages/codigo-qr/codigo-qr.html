@@ -8,23 +8,5 @@
 
 
 <ion-content padding>
-<ion-item>
-  <ion-input type="text" placeholder="Datos para QR" [(ngModel)]="dataqr"></ion-input>
-</ion-item>
-<button ion-button full icon-left (click)="crearQR()"><ion-icon name="barcode"></ion-icon>Crear Codigo</button>
-<button ion-button full icon-left (click)="escanearQR()"><ion-icon name="qr-scanner"></ion-icon>Escanear Codigo</button>
-
-<ion-card *ngIf="creandoQr">
-<ngx-qrcode [qrc-value]="creandoQr"></ngx-qrcode>
-<ion-card-content>
-    <p>Valor: {{creandoQr}}</p>
-</ion-card-content>
-</ion-card>
-
-<ion-card *ngIf="escaneandoQr">
-    <ion-card-content>
-     Resultado: {{escaneandoQr}}
-    </ion-card-content>
-    </ion-card>
 
 </ion-content>
