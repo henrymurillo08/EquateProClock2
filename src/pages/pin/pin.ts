@@ -35,34 +35,67 @@ export class PinPage {
   public datosSalida= [];
   public fecha:any;
   public horacorta = moment().format('hh:mm a');
-  public foto:string=null;  
+  public foto:string="";  
   public latitud:any;
   public longitud:any;
   public guardardatos = [];
   public empleados = [];
   public nombre:any; 
+  public dispositivoId:any;
+  public dispositivoNombre:any;
   public entrada = {
+    creadoFecha: "",
+    creadoPor: "",
+    dia: "",
+    eliminado:false,
+    dispositivoId:0,  
     empleadoId:"",
-    dia:"",
-    entrada:"",
-    horas:0,
-    precio:0,
-    total:0,
+    entrada: "",
+    entradaAlterada: false,
+    salidaAlterada: false,
     fotoEntrada: false,
     fotosalida: false,
-    manualEntrada:false,
+    horas: 0,
+    foto64: "",
+    manualEntrada: false,
     manualsalida: false,
-    creadoPor:"",
-    creadoFecha:"",
-    modificadoPor:"",
-    modificadoFecha:""
+    tipoMarca:"P",
+    modificadoPor: "",
+    modificadoFecha: "",
+    precio:0,
+    total:0    
   };
   public salida = {
+    creadoFecha: "",
+    creadoPor: "",
+    dia: "",
+    eliminado: false,
+    dispositivoId: 0,
+    empleadoId: "",
     salida: "",
-    fotoSalida: "",
+    entradaAlterada: false,
+    salidaAlterada: false,
+    fotoEntrada: false,
+    fotosalida: false,
+    horas: 0,
+    foto64: "",
+    manualEntrada: false,
+    manualsalida: false,
+    tipoMarca: "P",
     modificadoPor: "",
-    modificadoFecha: ""
+    modificadoFecha: "",
+    precio: 0,
+    total: 0    
   };
+
+  obtenerDispositivo() {
+    this.storage.ready().then(() => {
+      this.storage.get("cliente").then(data => {
+        this.dispositivoId = data.dispositivoId;
+        this.dispositivoNombre = data.nombre;
+      })
+    })
+  }
 
   obtenerEmpleados() {
     this.storage.ready().then(() => {
@@ -100,6 +133,7 @@ export class PinPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
     public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation,
     public storage: Storage, public modalCtrl: ModalController) {
+    this.obtenerDispositivo();
     this.obtenerEmpleados();
     this.obtenerRegistros();
     this.obtenerEntradas();
@@ -131,31 +165,19 @@ export class PinPage {
   borrar() {
     if (this.conta >= 0) {
       if (this.conta == 1) {
-        this.n1 = ""
-        var elem = document.getElementById('primero');
-        // agregar clase  
-        elem.classList.remove('active');
+        this.n1 = "";
       }
 
       if (this.conta == 2) {
-        this.n2 = ""
-        var elem = document.getElementById('segundo');
-        // agregar clase  
-        elem.classList.remove('active');
+        this.n2 = "";
       }
 
       if (this.conta == 3) {
-        this.n3 = ""
-        var elem = document.getElementById('tercero');
-        // agregar clase  
-        elem.classList.remove('active');
+        this.n3 = "";
       }
 
       if (this.conta == 4) {
-        this.n4 = ""
-        var elem = document.getElementById('cuarto');
-        // agregar clase  
-        elem.classList.remove('active');
+        this.n4 = "";
       }
 
       this.conta = this.conta - 1;
@@ -165,10 +187,6 @@ export class PinPage {
 
   clearAll() {
     this.conta = 0;
-    document.getElementById('primero').classList.remove('active');
-    document.getElementById('segundo').classList.remove('active');
-    document.getElementById('tercero').classList.remove('active');
-    document.getElementById('cuarto').classList.remove('active');
     this.n1 = ""
     this.n2 = ""
     this.n3 = ""
@@ -209,20 +227,22 @@ export class PinPage {
       }      
       setTimeout(() => {
         loader.dismiss();
-      }, 3000);
+      }, 1000);
     }
   }
 
   guardarEntrada(){    
    
     this.entrada.empleadoId = this.empleadoId;
-    this.entrada.dia = moment().format("YYYY-MM-DD");
+    this.entrada.dia = moment().format("YYYY-MM-DD hh:mm");
     this.entrada.entrada = moment().format("MM/DD/YYYY hh:mm a");
     this.entrada.fotoEntrada = this.tomafoto;
-    this.entrada.creadoPor = this.nombre;
-    this.entrada.creadoFecha = moment().format("YYYY-MM-DD hh:mm a");
-    this.entrada.modificadoPor = this.nombre;
-    this.entrada.modificadoFecha = moment().format("YYYY-MM-DD hh:mm a");
+    this.entrada.creadoPor = "tablet01";
+    this.entrada.creadoFecha = moment().format("YYYY-MM-DD hh:mm");
+    this.entrada.modificadoPor = "tablet01";    
+    this.entrada.modificadoFecha = moment().format("YYYY-MM-DD hh:mm");
+    this.entrada.dispositivoId = this.dispositivoId;
+    this.entrada.foto64 = this.foto;
     let entradaFinal = {
       empleadoId: this.empleadoId,
       estado:'noEnviado',
@@ -252,10 +272,14 @@ export class PinPage {
             this.entradas = this.entradas + 1;
             this.pantallaEstado = EntradaPage;
           } else {
+            this.salida.dispositivoId = this.dispositivoId;
+            this.salida.empleadoId = this.empleadoId;
             this.salida.salida = moment().format("MM/DD/YYYY hh:mm a");
-            this.salida.fotoSalida = this.tomafoto;
-            this.salida.modificadoPor = this.nombre;
+            this.salida.fotosalida = this.tomafoto;
+            this.salida.creadoPor = "tablet01";    
+            this.salida.modificadoPor = "tablet01";    
             this.salida.modificadoFecha = moment().format("YYYY-MM-DD hh:mm a");
+            this.salida.foto64 = this.foto;
             let salidaFinal = {
               empleadoId: this.empleadoId,
               salida:this.salida
@@ -305,7 +329,7 @@ export class PinPage {
   MostarToast(MensajeError: any) {
     let toast = this.toastCtrl.create({
       message: MensajeError,
-      duration: 3000,
+      duration: 1000,
       showCloseButton: true,
       closeButtonText: "x"
     });
@@ -317,11 +341,11 @@ export class PinPage {
       destinationType: this.camara.DestinationType.DATA_URL,
       targetWidth: 400,
       targetHeight: 400,
-      quality: 100
+      quality: 50
     }
     this.camara.getPicture( options )
     .then(imageData => {
-      this.foto = `data:image/png;base64,${imageData}`;
+      this.foto = imageData;
       this.guardarEntrada();
     })
     .catch(error =>{

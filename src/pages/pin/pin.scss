@@ -6,7 +6,7 @@ page-pin {
 	
 	p { font-size: 40px;
 		text-align: center;
-		padding-top: 40px;
+		padding-top: 100px;
 		padding-bottom: 30px;
  }
 
@@ -41,7 +41,7 @@ background-image: url('../../assets/imgs/imagen.jpeg');
   width: 50%;
   height: auto;
   animation: animation 3100ms linear infinite both;
-  animation-delay: 1s;
+  animation-delay: .5s;
 }
 	  
 	  #numbers {
@@ -50,9 +50,9 @@ background-image: url('../../assets/imgs/imagen.jpeg');
     margin-left: 70px;
 		position: relative;
 		display: block;
-		-webkit-transition: all 1s ease-out;
-		-moz-transition: all 1s ease-out;
-		transition: all 1s ease-out;
+		-webkit-transition: all .5s ease-out;
+		-moz-transition: all .5s ease-out;
+		transition: all .5s ease-out;
 		opacity: 1;
 	  }
 	  

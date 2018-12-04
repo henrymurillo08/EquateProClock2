@@ -18,6 +18,8 @@ import { HomePage } from '../home/home';
 })
 export class CodigoQrPage {
 
+  public dispositivoId: any;
+  public dispositivoNombre: any;
   public escaneandoQr:string;
   public empleados= [];
   public entradas: any;
@@ -33,28 +35,58 @@ export class CodigoQrPage {
   public guardardatos = [];
   public nombre: any;
   public entrada = {
-    empleadoId: "",
+    creadoFecha: "",
+    creadoPor: "",
     dia: "",
+    eliminado: false,
+    dispositivoId: 0,
+    empleadoId: "",
     entrada: "",
-    horas: 0,
-    precio: 0,
-    total: 0,
+    entradaAlterada: false,
+    salidaAlterada: false,
     fotoEntrada: false,
     fotosalida: false,
+    horas: 0,
+    foto64: "",
     manualEntrada: false,
     manualsalida: false,
-    creadoPor: "",
-    creadoFecha: "",
+    tipoMarca: "T",
     modificadoPor: "",
-    modificadoFecha: ""
+    modificadoFecha: "",
+    precio: 0,
+    total: 0  
   };
   public salida = {
+    creadoFecha: "",
+    creadoPor: "",
+    dia: "",
+    eliminado: false,
+    dispositivoId: 0,
+    empleadoId: "",
     salida: "",
-    fotoSalida: "",
+    entradaAlterada: false,
+    salidaAlterada: false,
+    fotoEntrada: false,
+    fotosalida: false,
+    horas: 0,
+    foto64: "",
+    manualEntrada: false,
+    manualsalida: false,
+    tipoMarca: "T",
     modificadoPor: "",
-    modificadoFecha: ""
+    modificadoFecha: "",
+    precio: 0,
+    total: 0    
   };
 
+  obtenerDispositivo() {
+    this.storage.ready().then(() => {
+      this.storage.get("cliente").then(data => {
+        this.dispositivoId = data.dispositivoId;
+        this.dispositivoNombre = data.nombre;
+      })
+    })
+  }
 
   obtenerEmpleados() {
     this.storage.ready().then(() => {
@@ -93,6 +125,7 @@ export class CodigoQrPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private barcodeScanner: BarcodeScanner, public camara: Camera, public storage: Storage,
     public modalCtrl: ModalController, public loadingCtrl: LoadingController, public toastCtrl: ToastController, platform: Platform,) {
     this.escanearQR();
+    this.obtenerDispositivo();
     this.obtenerEmpleados();
     this.obtenerEntradas();
     this.obtenerSalidas();
@@ -139,13 +172,15 @@ export class CodigoQrPage {
   guardarEntrada() {
 
     this.entrada.empleadoId = this.empleadoId;
-    this.entrada.dia = moment().format("YYYY-MM-DD");
+    this.entrada.dia = moment().format("YYYY-MM-DD hh:mm");
     this.entrada.entrada = moment().format("MM/DD/YYYY hh:mm a");
     this.entrada.fotoEntrada = this.tomafoto;
-    this.entrada.creadoPor = this.nombre;
-    this.entrada.creadoFecha = moment().format("YYYY-MM-DD hh:mm a");
-    this.entrada.modificadoPor = this.nombre;
-    this.entrada.modificadoFecha = moment().format("YYYY-MM-DD hh:mm a");
+    this.entrada.creadoPor = "tablet01";
+    this.entrada.creadoFecha = moment().format("YYYY-MM-DD hh:mm");
+    this.entrada.modificadoPor = "tablet01";
+    this.entrada.modificadoFecha = moment().format("YYYY-MM-DD hh:mm");
+    this.entrada.dispositivoId = this.dispositivoId;
+    this.entrada.foto64 = this.foto;
     let entradaFinal = {
       empleadoId: this.empleadoId,
       estado: 'noEnviado',
@@ -175,10 +210,14 @@ export class CodigoQrPage {
         this.entradas = this.entradas + 1;
         this.pantallaEstado = EntradaPage;
       } else {
+        this.salida.dispositivoId = this.dispositivoId;
+        this.salida.empleadoId = this.empleadoId;
         this.salida.salida = moment().format("MM/DD/YYYY hh:mm a");
-        this.salida.fotoSalida = this.tomafoto;
-        this.salida.modificadoPor = this.nombre;
+        this.salida.fotosalida = this.tomafoto;
+        this.salida.creadoPor = "tablet01";
+        this.salida.modificadoPor = "tablet01";
         this.salida.modificadoFecha = moment().format("YYYY-MM-DD hh:mm a");
+        this.salida.foto64 = this.foto;
         let salidaFinal = {
           empleadoId: this.empleadoId,
           salida: this.salida

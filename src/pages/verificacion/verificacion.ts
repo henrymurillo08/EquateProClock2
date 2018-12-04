@@ -38,6 +38,7 @@ export class VerificacionPage {
   }
 
   numeros(valor: any) {
+    
     this.conta = this.conta + 1;
     if (this.conta == 1) {
       this.n1 = "" + valor
