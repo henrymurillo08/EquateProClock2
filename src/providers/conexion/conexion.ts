@@ -9,7 +9,7 @@ export class ConexionProvider {
   public Url: any;
   
   constructor(public http:Http) {
-    this.Url = "https://equatetime.azurewebsites.net/api/"
+    this.Url = "https://equatetime.azurewebsites.net/api/";
   }
 
 }

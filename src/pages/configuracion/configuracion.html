@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="primary" hideBackButton>.
+  <ion-navbar color="primary" hideBackButton>
     <ion-title text-center>
       Configuracion
     </ion-title>
@@ -9,12 +9,13 @@
 
 
 <ion-content padding>
-<p>Empleados</p>
-  <ion-list *ngFor="let items of empleados">    
-    <button style="border-bottom-style: inset !important; border-bottom: #494848;" ion-item >
-      <p>{{items.primerNombre + " " + items.primerApellido }}</p>
-      <ion-icon color="primary" name="arrow-dropright" item-end></ion-icon>
-    </button>
-  </ion-list>
+    <ion-searchbar (ionInput)="getItems($event)" placeholder="Buscar empleado" showCancelButton="true" animated="true">
+    </ion-searchbar>
+    <ion-list [virtualScroll]="empleados">
+      <button ion-item name="listaempleados" *virtualItem="let items; let i = index;" (click)="enviar(items.empleadoId,items.primerNombre,items.primerApellido,items.capturarFoto,i)">
+          <p>{{ i+1 }} - {{items.primerNombre + " " + items.primerApellido }}</p>
+        <ion-icon color="primary" name="arrow-dropright" item-end></ion-icon>
+      </button>
+    </ion-list>
 
 </ion-content>

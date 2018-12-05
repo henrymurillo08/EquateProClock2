@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, Platform } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Camera, CameraOptions} from '@ionic-native/camera'
 import moment, { duration } from 'moment';
@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { ModalController } from 'ionic-angular';
 import { EntradaPage } from '../entrada/entrada';
 import { SalidaPage } from '../salida/salida';
+import { HomePage } from '../home/home';
 
 
 @IonicPage()
@@ -53,8 +54,8 @@ export class PinPage {
     entrada: "",
     entradaAlterada: false,
     salidaAlterada: false,
-    fotoEntrada: false,
-    fotosalida: false,
+    fotoEntrada: this.tomafoto,
+    fotosalida: this.tomafoto,
     horas: 0,
     foto64: "",
     manualEntrada: false,
@@ -75,8 +76,8 @@ export class PinPage {
     salida: "",
     entradaAlterada: false,
     salidaAlterada: false,
-    fotoEntrada: false,
-    fotosalida: false,
+    fotoEntrada: this.tomafoto,
+    fotosalida: this.tomafoto,
     horas: 0,
     foto64: "",
     manualEntrada: false,
@@ -131,7 +132,7 @@ export class PinPage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
-    public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation,
+    public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation, public platform: Platform,
     public storage: Storage, public modalCtrl: ModalController) {
     this.obtenerDispositivo();
     this.obtenerEmpleados();
@@ -140,6 +141,9 @@ export class PinPage {
     this.obtenerSalidas();
     this.conta = navParams.data
     this.coordenada();
+    platform.registerBackButtonAction(fn => {
+      this.navCtrl.push(HomePage);
+    })
   }
 
   numeros(valor: any) {
@@ -235,11 +239,11 @@ export class PinPage {
    
     this.entrada.empleadoId = this.empleadoId;
     this.entrada.dia = moment().format("YYYY-MM-DD hh:mm");
-    this.entrada.entrada = moment().format("MM/DD/YYYY hh:mm a");
+    this.entrada.entrada = moment().format("MM/DD/YYYY hh:mm A");
     this.entrada.fotoEntrada = this.tomafoto;
-    this.entrada.creadoPor = "tablet01";
+    this.entrada.creadoPor = this.dispositivoNombre
     this.entrada.creadoFecha = moment().format("YYYY-MM-DD hh:mm");
-    this.entrada.modificadoPor = "tablet01";    
+    this.entrada.modificadoPor = this.dispositivoNombre
     this.entrada.modificadoFecha = moment().format("YYYY-MM-DD hh:mm");
     this.entrada.dispositivoId = this.dispositivoId;
     this.entrada.foto64 = this.foto;
@@ -274,11 +278,11 @@ export class PinPage {
           } else {
             this.salida.dispositivoId = this.dispositivoId;
             this.salida.empleadoId = this.empleadoId;
-            this.salida.salida = moment().format("MM/DD/YYYY hh:mm a");
+            this.salida.salida = moment().format("MM/DD/YYYY hh:mm A");
             this.salida.fotosalida = this.tomafoto;
-            this.salida.creadoPor = "tablet01";    
-            this.salida.modificadoPor = "tablet01";    
-            this.salida.modificadoFecha = moment().format("YYYY-MM-DD hh:mm a");
+            this.salida.creadoPor = this.dispositivoNombre  
+            this.salida.modificadoPor = this.dispositivoNombre   
+            this.salida.modificadoFecha = moment().format("YYYY-MM-DD hh:mm");
             this.salida.foto64 = this.foto;
             let salidaFinal = {
               empleadoId: this.empleadoId,

@@ -28,6 +28,7 @@ import { HomePage } from '../pages/home/home';
 import { ConfiguracionPage } from "../pages/configuracion/configuracion";
 import { EntradaPage } from '../pages/entrada/entrada';
 import { SalidaPage } from '../pages/salida/salida';
+import { EmpleadoPage } from '../pages/empleado/empleado';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { SalidaPage } from '../pages/salida/salida';
     AdministradorPage,
     ConfiguracionPage,
     EntradaPage,
-    SalidaPage
+    SalidaPage,
+    EmpleadoPage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +63,8 @@ import { SalidaPage } from '../pages/salida/salida';
     AdministradorPage,
     ConfiguracionPage,
     EntradaPage,
-    SalidaPage
+    SalidaPage,
+    EmpleadoPage
   ],
   providers: [
     StatusBar,

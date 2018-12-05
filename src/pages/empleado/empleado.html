@@ -1,0 +1,28 @@
+
+<ion-header>
+<ion-navbar color="primary">.
+  <ion-title text-center>
+    Editar Empleado
+  </ion-title>
+</ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+ 
+    <ion-list>
+      <ion-item>
+        <ion-label stacked>Codigo: </ion-label>
+        <ion-input disabled [(ngModel)]="id"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Nombre: </ion-label>
+        <ion-input disabled [(ngModel)]="empleado"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Tomar Foto</ion-label>
+      <ion-checkbox [(ngModel)]="foto" (ionChange)="updateCucumber()"></ion-checkbox>
+      </ion-item>
+    </ion-list>
+
+</ion-content>

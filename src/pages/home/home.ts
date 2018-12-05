@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController, Platform, AlertController } from 'ionic-angular';
 import moment from 'moment';
 import 'moment/locale/es';
 import { AdministradorPage } from '../administrador/administrador';
@@ -34,6 +34,7 @@ export class HomePage {
       })
     })   
   }
+
   obtenerRegistros(){
     this.storageCrtl.ready().then(() => {
       this.storageCrtl.get("registros").then(data => {
@@ -42,10 +43,8 @@ export class HomePage {
       })
     })   
   }
-  
 
-
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public storageCrtl: Storage, private networkCtrl: Network,
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public storageCrtl: Storage, private networkCtrl: Network, platform: Platform, public alertCtrl: AlertController,
     public conexion: ConexionProvider, public http: Http) {
     this.obtenerDatos();
     this.obtenerRegistros();
@@ -55,6 +54,25 @@ export class HomePage {
     Observable.interval(1000).subscribe(() => {
       this.horaActual();
     });
+    platform.registerBackButtonAction(fn => {
+      let alert = this.alertCtrl.create({
+        title: 'Salir de EquateClock',
+        subTitle: 'Desea salir de EquateClock',
+        buttons: [
+          {
+            text: 'Continuar',
+            role: 'Continuar',
+            handler: () => {
+              platform.exitApp();
+            }
+          },
+          {
+            text: 'Cancelar',
+          }
+        ]
+      });
+      alert.present();
+    })
   }
   
   obtenerEntradas() {
@@ -88,18 +106,21 @@ horaActual(){
 
 
   empleados() {
+    let cont = 0;
     let direccion = this.conexion.Url + "empleados";
     this.http.get(direccion)
       .map(resp => resp.json())
       .subscribe(data => {
         for (let item of data) {
-          if (item.companiaId == 2) {
+          if (item.companiaId == this.companiaid && cont < 300) {
             this.datosEmpleados.push(item);
           }
+          cont++;
         }
         this.storageCrtl.set('empleados', this.datosEmpleados);
       })
   }
+
 
   sincronizarEntrada() {
     this.TipoConexion = this.networkCtrl.type;
@@ -107,7 +128,6 @@ horaActual(){
       if (this.datosEntradas.length > 0) {
         let cont = 0;
         for(let item of this.datosEntradas) {
-          console.log(cont);
            let verificar = this.conexion.Url + "tiempo/empleado/" + item.empleadoId;
            this.http.get(verificar)
             .map(res => res.json())

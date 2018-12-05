@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="secondary" hideBackButton>.
     <ion-title text-center>
-    Entrada
+    {{empleado}}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -13,7 +13,7 @@
     <ion-row>
       <ion-col><ion-icon name="clock"></ion-icon></ion-col>
       <ion-col>
-        <p>Se registro su {{estado + ' ' + empleado + ' a las ' + hora}} </p>
+        <p>Se registro su {{estado + ' a las ' + hora}} </p>
       </ion-col>
     </ion-row>
   </ion-grid>

@@ -29,25 +29,6 @@ export class MyApp {
     })
       statusBar.styleDefault();
       splashScreen.hide();
-      platform.registerBackButtonAction(fn => {
-        let alert = this.alertCtrl.create({
-          title: 'Salir de EquateClock',
-          subTitle: 'Desea salir de EquateClock',
-          buttons: [
-            {
-              text: 'Continuar',
-              role: 'Continuar',
-              handler: () => {
-                platform.exitApp();
-              }
-            },
-            {
-              text: 'Cancelar',
-            }
-          ]
-        });
-        alert.present();        
-      })
     });
     
   }

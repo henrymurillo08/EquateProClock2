@@ -44,8 +44,8 @@ export class CodigoQrPage {
     entrada: "",
     entradaAlterada: false,
     salidaAlterada: false,
-    fotoEntrada: false,
-    fotosalida: false,
+    fotoEntrada: this.tomafoto,
+    fotosalida: this.tomafoto,
     horas: 0,
     foto64: "",
     manualEntrada: false,
@@ -66,8 +66,8 @@ export class CodigoQrPage {
     salida: "",
     entradaAlterada: false,
     salidaAlterada: false,
-    fotoEntrada: false,
-    fotosalida: false,
+    fotoEntrada: this.tomafoto,
+    fotosalida: this.tomafoto,
     horas: 0,
     foto64: "",
     manualEntrada: false,
@@ -124,12 +124,14 @@ export class CodigoQrPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private barcodeScanner: BarcodeScanner, public camara: Camera, public storage: Storage,
     public modalCtrl: ModalController, public loadingCtrl: LoadingController, public toastCtrl: ToastController, platform: Platform,) {
-    this.escanearQR();
     this.obtenerDispositivo();
     this.obtenerEmpleados();
     this.obtenerEntradas();
     this.obtenerSalidas();
     this.obtenerRegistros();
+    platform.registerBackButtonAction(fn => {
+      this.navCtrl.push(HomePage);
+    })
   }
 
 
@@ -173,11 +175,11 @@ export class CodigoQrPage {
 
     this.entrada.empleadoId = this.empleadoId;
     this.entrada.dia = moment().format("YYYY-MM-DD hh:mm");
-    this.entrada.entrada = moment().format("MM/DD/YYYY hh:mm a");
+    this.entrada.entrada = moment().format("MM/DD/YYYY hh:mm A");
     this.entrada.fotoEntrada = this.tomafoto;
-    this.entrada.creadoPor = "tablet01";
+    this.entrada.creadoPor = this.dispositivoNombre
     this.entrada.creadoFecha = moment().format("YYYY-MM-DD hh:mm");
-    this.entrada.modificadoPor = "tablet01";
+    this.entrada.modificadoPor = this.dispositivoNombre
     this.entrada.modificadoFecha = moment().format("YYYY-MM-DD hh:mm");
     this.entrada.dispositivoId = this.dispositivoId;
     this.entrada.foto64 = this.foto;
@@ -212,11 +214,11 @@ export class CodigoQrPage {
       } else {
         this.salida.dispositivoId = this.dispositivoId;
         this.salida.empleadoId = this.empleadoId;
-        this.salida.salida = moment().format("MM/DD/YYYY hh:mm a");
+        this.salida.salida = moment().format("MM/DD/YYYY hh:mm A");
         this.salida.fotosalida = this.tomafoto;
-        this.salida.creadoPor = "tablet01";
-        this.salida.modificadoPor = "tablet01";
-        this.salida.modificadoFecha = moment().format("YYYY-MM-DD hh:mm a");
+        this.salida.creadoPor = this.dispositivoNombre;
+        this.salida.modificadoPor = this.dispositivoNombre;
+        this.salida.modificadoFecha = moment().format("YYYY-MM-DD hh:mm");
         this.salida.foto64 = this.foto;
         let salidaFinal = {
           empleadoId: this.empleadoId,
