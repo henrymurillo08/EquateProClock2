@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { ConfiguracionPage } from '../configuracion/configuracion';
 import { ToastController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -10,15 +11,24 @@ import { ToastController } from 'ionic-angular';
 })
 export class AdministradorPage {
 
-  public usuario:any = "admin";
-  public pass:any = "admin";
+  public usuario:any;
+  public pass:any;
   public User:any;
   public Contrasena:any;
 
+  obtenerDispositivo() {
+    this.storage.ready().then(() => {
+      this.storage.get("cliente").then(data => {
+        this.usuario = data.username;
+        this.pass = data.contrasena;
+      })
+    })
+  }
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public toastCtrl: ToastController) {
-   
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public toastCtrl: ToastController, public storage: Storage) {
+    this.obtenerDispositivo();
   }
 
 
@@ -39,7 +49,6 @@ export class AdministradorPage {
       closeButtonText: "x"
     });
     toast.present();
-  }
-  
+    }  
 
 }

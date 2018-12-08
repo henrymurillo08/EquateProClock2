@@ -20,6 +20,7 @@ export class VerificacionPage {
   public n4: any;
   public conta: any;
   public companiaid:any;
+  public clienteId: any;
   public datosEmpleados = [];
   public registros = {
     entradas:0,
@@ -142,6 +143,7 @@ export class VerificacionPage {
       this.MostarToast(err);
     }else{
       this.companiaid = data.companiaId;
+      this.clienteId = data.clienteId;
       this.storage.set('Dispositivo', this.dispositivo);
       this.storage.set('cliente', data);
       this.storage.set('registros', this.registros);
@@ -156,17 +158,11 @@ export class VerificacionPage {
 
   empleados(){
     let cont = 0;
-    let direccion =this.conexion.Url + "empleados";
+    let direccion =this.conexion.Url + "empleados/compania/" + this.companiaid + "/sucursal/" + this.clienteId;
     this.http.get(direccion)
     .map(resp => resp.json())
     .subscribe(data=>{
-     for(let item of data){
-        if(item.companiaId == this.companiaid && cont < 300){
-          this.datosEmpleados.push(item);
-        }
-        cont++;
-     }
-     this.storage.set('empleados', this.datosEmpleados);
+      this.storage.set('empleados', data);
     })
   }
 

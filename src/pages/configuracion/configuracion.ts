@@ -29,8 +29,8 @@ export class ConfiguracionPage {
 
     if (val && val.trim() != '') {
       this.empleados = this.empleados.filter((item) => {
-        let value = (item.primerNombre.toLowerCase().indexOf(val.toLowerCase()) > -1);
-        return (item.primerNombre.toLowerCase().indexOf(val.toLowerCase()) > -1);
+        let value = (item.nombre.toLowerCase().indexOf(val.toLowerCase()) > -1);
+        return (item.nombre.toLowerCase().indexOf(val.toLowerCase()) > -1);
 
       })
     } else {
@@ -38,8 +38,8 @@ export class ConfiguracionPage {
     }
   }
 
-  enviar(id,nombre,apellido,foto,posicion){
-    this.navCtrl.push(EmpleadoPage, { empleadoId: id, nombre: nombre, apellido: apellido, foto: foto, posicion: posicion})
+  enviar(id,nombre,foto,posicion){
+    this.navCtrl.push(EmpleadoPage, { empleadoId: id, nombre: nombre, foto: foto, posicion: posicion})
   }
 
 

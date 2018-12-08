@@ -83,7 +83,7 @@ export class CodigoQrPage {
     this.storage.ready().then(() => {
       this.storage.get("cliente").then(data => {
         this.dispositivoId = data.dispositivoId;
-        this.dispositivoNombre = data.nombre;
+        this.dispositivoNombre = data.dispositivo;
       })
     })
   }
@@ -151,7 +151,7 @@ export class CodigoQrPage {
     for (let item of this.empleados) {
       if (this.escaneandoQr == item.pin) {
         verificar = 1;
-        this.nombre = item.primerNombre + " " + item.primerApellido;
+        this.nombre = item.nombre;
         this.empleadoId = item.empleadoId;
         this.tomafoto = item.capturarFoto;
       }
@@ -232,7 +232,6 @@ export class CodigoQrPage {
           this.storage.set('salidas', this.guardardatos);
           this.estado = 'salida';
           this.salidas = this.salidas + 1;
-          this.entradas = this.entradas - 1;
           this.pantallaEstado = SalidaPage;
         } else {
           arreglo2 = this.datosSalida;
@@ -241,7 +240,6 @@ export class CodigoQrPage {
           this.storage.set('salidas', this.guardardatos);
           this.estado = 'salida';
           this.salidas = this.salidas + 1;
-          this.entradas = this.entradas - 1;
           this.pantallaEstado = SalidaPage;
         }
       }

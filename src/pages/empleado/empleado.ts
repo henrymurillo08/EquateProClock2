@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { ConfiguracionPage } from '../configuracion/configuracion';
 import { Http } from '@angular/http';
@@ -15,18 +15,19 @@ import 'moment/locale/es';
 export class EmpleadoPage {
   public id:any;
   public nombre: any;
-  public apellido: any;
   public foto: boolean;
   public empleado: any;
   public newFoto:any;
   public empleados = [];
   public posicion:any;
   public nombre_empresa:any;
+  public dispositivo:any;
 
   obtenerDatos() {
     this.storage.ready().then(() => {
       this.storage.get("cliente").then(data => {
         this.nombre_empresa = data.nombre;
+        this.dispositivo = data.dispositivo
       })
     })
   }
@@ -39,14 +40,13 @@ export class EmpleadoPage {
     })
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage, public http: Http, public conexion:ConexionProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage, public http: Http, public conexion: ConexionProvider, public alertCtrl: AlertController) {
     this.obtenerEmpleados();
     this.id = this.navParams.get('empleadoId');
     this.nombre = this.navParams.get('nombre');
-    this.apellido = this.navParams.get('apellido');
     this.foto = this.navParams.get('foto');
     this.posicion = this.navParams.get('posicion');
-    this.empleado = this.nombre + ' ' + this.apellido;
+    this.empleado = this.nombre
   }
 
 
@@ -58,16 +58,32 @@ export class EmpleadoPage {
          let direccion = this.conexion.Url + "empleado/foto/" + this.id;  
         let modificarEMP = {
           capturarFoto:this.foto,
-          modificadoPor:this.nombre,
+          modificadoPor: this.dispositivo,
           modificadoFecha: moment().format("YYYY-MM-DD hh:mm")
         }
          this.http.patch(direccion, modificarEMP)
            .subscribe(respuesta => {
              let valor = respuesta.json;
            })
-         this.navCtrl.push(ConfiguracionPage);
+         this.presentAlert();
        })
      })
     }
+
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Actualizacion exitosa\n',
+      buttons: [
+        {
+          text: 'Continuar',
+          role: 'Continuar',
+          handler: () => {
+            this.navCtrl.push(ConfiguracionPage);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 
 }

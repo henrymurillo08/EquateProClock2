@@ -93,7 +93,7 @@ export class PinPage {
     this.storage.ready().then(() => {
       this.storage.get("cliente").then(data => {
         this.dispositivoId = data.dispositivoId;
-        this.dispositivoNombre = data.nombre;
+        this.dispositivoNombre = data.dispositivo;
       })
     })
   }
@@ -139,8 +139,8 @@ export class PinPage {
     this.obtenerRegistros();
     this.obtenerEntradas();
     this.obtenerSalidas();
-    this.conta = navParams.data
-    this.coordenada();
+    this.conta = 0;
+    // this.coordenada();
     platform.registerBackButtonAction(fn => {
       this.navCtrl.push(HomePage);
     })
@@ -171,30 +171,25 @@ export class PinPage {
       if (this.conta == 1) {
         this.n1 = "";
       }
-
       if (this.conta == 2) {
         this.n2 = "";
       }
-
       if (this.conta == 3) {
         this.n3 = "";
       }
-
       if (this.conta == 4) {
         this.n4 = "";
       }
-
       this.conta = this.conta - 1;
-
     }
   } 
 
   clearAll() {
     this.conta = 0;
-    this.n1 = ""
-    this.n2 = ""
-    this.n3 = ""
-    this.n4 = ""
+    this.n1 = "";
+    this.n2 = "";
+    this.n3 = "";
+    this.n4 = "";
   }
 
   Login() {
@@ -205,7 +200,7 @@ export class PinPage {
       this.clearAll();
     } else {
       let loader = this.loadingCtrl.create({
-        content: "verificando datos ...",
+        content: "verificando datos...",
       });
       loader.present();
       this.numero = this.n1.concat(this.n2, this.n3, this.n4);
@@ -213,7 +208,7 @@ export class PinPage {
       for(let item of this.empleados){
         if(this.numero == item.pin){
           verificar = 1;   
-          this.nombre = item.primerNombre + " " + item.primerApellido;
+          this.nombre = item.nombre;
           this.empleadoId = item.empleadoId;     
           this.tomafoto = item.capturarFoto;  
          }        
@@ -296,7 +291,6 @@ export class PinPage {
                 this.storage.set('salidas', this.guardardatos);
                 this.estado = 'salida';
                 this.salidas = this.salidas + 1;
-                this.entradas = this.entradas - 1;
                 this.pantallaEstado = SalidaPage;
               } else {
                 arreglo2 = this.datosSalida ;
@@ -305,7 +299,6 @@ export class PinPage {
                 this.storage.set('salidas', this.guardardatos);
                 this.estado = 'salida';
                 this.salidas = this.salidas + 1;
-                this.entradas = this.entradas - 1;
                 this.pantallaEstado = SalidaPage;
               }
           }
@@ -320,15 +313,15 @@ export class PinPage {
   }
 
 
-  coordenada(){
-    this.geolocation.getCurrentPosition().then((resp)=> {
-      this.latitud = resp.coords.latitude;
-      this.longitud = resp.coords.longitude;
-    }).catch((error) => {
-      let err = "Error al obtener las coordenadas";
-      this.MostarToast(err);
-    });
-  }
+  // coordenada(){
+  //   this.geolocation.getCurrentPosition().then((resp)=> {
+  //     this.latitud = resp.coords.latitude;
+  //     this.longitud = resp.coords.longitude;
+  //   }).catch((error) => {
+  //     let err = "Error al obtener las coordenadas";
+  //     this.MostarToast(err);
+  //   });
+  // }
 
   MostarToast(MensajeError: any) {
     let toast = this.toastCtrl.create({
@@ -350,11 +343,11 @@ export class PinPage {
     this.camara.getPicture( options )
     .then(imageData => {
       this.foto = imageData;
-      this.guardarEntrada();
     })
     .catch(error =>{
       console.error( error );
     });
+    this.guardarEntrada();
   }
 
   presentModal(pantalla) {
