@@ -136,10 +136,11 @@ export class CodigoQrPage {
 
 
   escanearQR(){
-    this.barcodeScanner.scan().then(barcodeData =>{
-      this.escaneandoQr = barcodeData.text;
-        this.verificar();
-    })
+    // this.barcodeScanner.scan().then(barcodeData =>{
+    //   this.escaneandoQr = barcodeData.text;
+    //     this.verificar();
+    // })
+    console.log("1");
   }
 
   verificar(){

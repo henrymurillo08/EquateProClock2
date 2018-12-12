@@ -40,8 +40,18 @@ export class HomePage {
   obtenerRegistros(){
     this.storageCrtl.ready().then(() => {
       this.storageCrtl.get("registros").then(data => {
-        this.entradas = data.entradas;
-        this.salidas = data.salidas;
+        if (data.salidas == data.entradas && data.salidas > 0 && data.entradas > 0) {
+          let registros = {
+            entradas: 0,
+            salidas: 0
+          }
+          this.entradas = 0;
+          this.salidas = 0;
+          this.storageCrtl.set("registros", registros)
+        }else{
+          this.entradas = data.entradas;
+          this.salidas = data.salidas;
+        }        
       })
     })   
   }
@@ -52,7 +62,6 @@ export class HomePage {
     this.obtenerRegistros();
     this.obtenerEntradas();
     this.obtenerSalidas();
-    this.limpiarRegistros();
     this.fecha = moment().format('LL');
     Observable.interval(1000).subscribe(() => {
       this.horaActual();
@@ -196,21 +205,6 @@ horaActual(){
         this.storageCrtl.set("salidas", nuevaSalidas)
       })
     })
-  }
-
-  limpiarRegistros(){
-    this.storageCrtl.ready().then(() => {
-      this.storageCrtl.get("registros").then(data => {
-        if (data.salidas == data.entradas && data.salidas > 0 && data.entradas > 0) {
-          let registros = {
-            entradas: 0,
-            salidas: 0
-          }
-          this.storageCrtl.set("registros", registros)
-        }
-      })
-    })   
-    
   }
 
 }

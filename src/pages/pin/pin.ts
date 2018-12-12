@@ -10,6 +10,7 @@ import { ModalController } from 'ionic-angular';
 import { EntradaPage } from '../entrada/entrada';
 import { SalidaPage } from '../salida/salida';
 import { HomePage } from '../home/home';
+import { isTrueProperty } from 'ionic-angular/umd/util/util';
 
 
 @IonicPage()
@@ -23,7 +24,7 @@ export class PinPage {
   public n2: any;
   public n3: any;
   public n4: any;
-  public conta: any;
+  public conta:any;
   public entradas:any;
   public salidas:any;
   public keys:any;
@@ -64,8 +65,9 @@ export class PinPage {
     modificadoPor: "",
     modificadoFecha: "",
     precio:0,
-    total:0    
+    total:0,
   };
+
   public salida = {
     creadoFecha: "",
     creadoPor: "",
@@ -86,7 +88,7 @@ export class PinPage {
     modificadoPor: "",
     modificadoFecha: "",
     precio: 0,
-    total: 0    
+    total: 0,
   };
 
   obtenerDispositivo() {
@@ -134,13 +136,14 @@ export class PinPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
     public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation, public platform: Platform,
     public storage: Storage, public modalCtrl: ModalController) {
+    this.conta = this.navParams.data;
     this.obtenerDispositivo();
     this.obtenerEmpleados();
     this.obtenerRegistros();
     this.obtenerEntradas();
     this.obtenerSalidas();
-    this.conta = 0;
-    // this.coordenada();
+    console.log(this.conta);
+
     platform.registerBackButtonAction(fn => {
       this.navCtrl.push(HomePage);
     })
@@ -149,40 +152,30 @@ export class PinPage {
   numeros(valor: any) {
     this.conta = this.conta + 1;
     if (this.conta == 1) {
-      this.n1 = "" + valor
+    this.n1 = "" + valor;
+      var element = <HTMLInputElement>document.getElementById("primero");
+       element.checked = true;
     }
 
     if (this.conta == 2) {
-      this.n2 = "" + valor
+      this.n2 = "" + valor;
+      var element = <HTMLInputElement>document.getElementById("segundo");
+      element.checked = true;
     }
 
     if (this.conta == 3) {
-      this.n3 = "" + valor
+      this.n3 = "" + valor;
+      var element = <HTMLInputElement>document.getElementById("tercero");
+      element.checked = true;
     }
 
     if (this.conta == 4) {
-      this.n4 = "" + valor
+      this.n4 = "" + valor;
+      var element = <HTMLInputElement>document.getElementById("cuarto");
+      element.checked = true;
       this.Login()
     }
   }
-
-  borrar() {
-    if (this.conta >= 0) {
-      if (this.conta == 1) {
-        this.n1 = "";
-      }
-      if (this.conta == 2) {
-        this.n2 = "";
-      }
-      if (this.conta == 3) {
-        this.n3 = "";
-      }
-      if (this.conta == 4) {
-        this.n4 = "";
-      }
-      this.conta = this.conta - 1;
-    }
-  } 
 
   clearAll() {
     this.conta = 0;
@@ -190,6 +183,14 @@ export class PinPage {
     this.n2 = "";
     this.n3 = "";
     this.n4 = "";
+    var element1 = <HTMLInputElement>document.getElementById("primero");
+    var element2 = <HTMLInputElement>document.getElementById("segundo");
+    var element3 = <HTMLInputElement>document.getElementById("tercero");
+    var element4 = <HTMLInputElement>document.getElementById("cuarto");
+    element1.checked = false;
+    element2.checked = false;
+    element3.checked = false;
+    element4.checked = false;
   }
 
   Login() {
@@ -312,17 +313,6 @@ export class PinPage {
         this.presentModal(this.pantallaEstado);
   }
 
-
-  // coordenada(){
-  //   this.geolocation.getCurrentPosition().then((resp)=> {
-  //     this.latitud = resp.coords.latitude;
-  //     this.longitud = resp.coords.longitude;
-  //   }).catch((error) => {
-  //     let err = "Error al obtener las coordenadas";
-  //     this.MostarToast(err);
-  //   });
-  // }
-
   MostarToast(MensajeError: any) {
     let toast = this.toastCtrl.create({
       message: MensajeError,
@@ -343,11 +333,11 @@ export class PinPage {
     this.camara.getPicture( options )
     .then(imageData => {
       this.foto = imageData;
+      this.guardarEntrada();  
     })
     .catch(error =>{
       console.error( error );
     });
-    this.guardarEntrada();
   }
 
   presentModal(pantalla) {

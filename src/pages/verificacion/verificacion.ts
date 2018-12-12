@@ -6,7 +6,8 @@ import { Device } from '@ionic-native/device';
 import { ConexionProvider } from '../../providers/conexion/conexion';
 import { Http } from '@angular/http';
 import { TabsPage } from '../tabs/tabs';
-import { duration } from 'moment';
+import moment from 'moment';
+import 'moment/locale/es';
 @IonicPage()
 @Component({
   selector: 'page-verificacion',
@@ -33,7 +34,6 @@ export class VerificacionPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController,
     public storage:Storage, private device: Device, public conexion:ConexionProvider, public http: Http, public loadingCtrl: LoadingController) { 
-      this.datosDispositivo();
       this.conta = 0;
     
   }
@@ -44,8 +44,6 @@ export class VerificacionPage {
     if (this.conta == 1) {
       this.n1 = "" + valor
       var elem = document.getElementById('primero');
-      // agregar clase  
-      elem.classList.add('active');
     }
 
     if (this.conta == 2) {
@@ -125,9 +123,18 @@ export class VerificacionPage {
   }
 
 
-  datosDispositivo(){
-    this.dispositivo.serial = this.device.serial;
-    this.dispositivo.plataforma = this.device.platform;
+  enviarDatosDisp(dispositivoId, nombre){
+    let direccion = this.conexion.Url + "dispositivo/datos/" + dispositivoId;
+    let infoDispo = {
+      ultimaTransmision: moment().format("YYYY-MM-DD hh:mm"),
+      version: this.device.version,
+      serieNo: this.device.serial,
+      modificadoPor: nombre,
+      modificadoFecha: moment().format("YYYY-MM-DD hh:mm")
+    }
+    this.http.patch(direccion, infoDispo)
+      .subscribe(respuesta => {
+      })
   }
  
   
@@ -144,11 +151,11 @@ export class VerificacionPage {
     }else{
       this.companiaid = data.companiaId;
       this.clienteId = data.clienteId;
-      this.storage.set('Dispositivo', this.dispositivo);
       this.storage.set('cliente', data);
       this.storage.set('registros', this.registros);
       this.storage.set('entradas', '');
       this.storage.set('salidas', '');
+      this.enviarDatosDisp(data.dispositivoId, data.sucursal);
       this.empleados();
       this.presentAlert();
     }   
