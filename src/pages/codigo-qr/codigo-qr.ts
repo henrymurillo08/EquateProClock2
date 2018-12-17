@@ -10,6 +10,7 @@ import { ModalController } from 'ionic-angular';
 import { EntradaPage } from '../entrada/entrada';
 import { SalidaPage } from '../salida/salida';
 import { HomePage } from '../home/home';
+import { PinPage } from '../pin/pin';
 
 @IonicPage()
 @Component({
@@ -262,7 +263,7 @@ export class CodigoQrPage {
     }
     this.camara.getPicture(options)
       .then(imageData => {
-        this.foto = `data:image/png;base64,${imageData}`;
+        this.foto = imageData;
         this.guardarEntrada();
       })
       .catch(error => {
@@ -282,6 +283,14 @@ export class CodigoQrPage {
   presentModal(pantalla) {
     const modal = this.modalCtrl.create(pantalla, { empleado: this.nombre, estado: this.estado, hora: this.horacorta });
     modal.present();
+  }
+
+  irHome() {
+    this.navCtrl.push(HomePage);
+  }
+
+  irPin() {
+    this.navCtrl.push(PinPage);
   }
   
 }

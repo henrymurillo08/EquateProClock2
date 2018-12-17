@@ -1,45 +1,39 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, Platform, AlertController } from 'ionic-angular';
-import moment from 'moment';
-import 'moment/locale/es';
-import { AdministradorPage } from '../administrador/administrador';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController   } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
-import { Network } from '@ionic-native/network';
+import { VerificacionPage } from '../verificacion/verificacion';
 import { ConexionProvider } from '../../providers/conexion/conexion';
 import { Http } from '@angular/http';
-import { Observable } from 'Rxjs/rx';
-import { PinPage } from '../pin/pin';
-import { CodigoQrPage } from '../codigo-qr/codigo-qr';
+import { Network } from '@ionic-native/network';
+import { ConfiguracionPage } from '../configuracion/configuracion';
+import { HomePage } from '../home/home';
 
+
+@IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-menu',
+  templateUrl: 'menu.html',
 })
-export class HomePage {
-  
-  public nombre_empresa:any 
-  public fecha:any;
-  public hora: any;
-  public entradas:any;
-  public salidas:any;
+export class MenuPage {
+  public entradas: any;
+  public salidas: any;
   public TipoConexion: any;
-  public companiaid:any;
+  public companiaid: any;
   public clienteId: any;
   public datosEntradas = [];
   public datosSalida = [];
   public datosEmpleados = [];
 
-  obtenerDatos(){
+  obtenerDatos() {
     this.storageCrtl.ready().then(() => {
       this.storageCrtl.get("cliente").then(data => {
-        this.nombre_empresa = data.dispositivo;
         this.companiaid = data.companiaId
         this.clienteId = data.clienteId
       })
-    })   
+    })
   }
 
-  obtenerRegistros(){
+  obtenerRegistros() {
     this.storageCrtl.ready().then(() => {
       this.storageCrtl.get("registros").then(data => {
         if (data.salidas == data.entradas && data.salidas > 0 && data.entradas > 0) {
@@ -50,45 +44,14 @@ export class HomePage {
           this.entradas = 0;
           this.salidas = 0;
           this.storageCrtl.set("registros", registros)
-        }else{
+        } else {
           this.entradas = data.entradas;
           this.salidas = data.salidas;
-        }        
+        }
       })
-    })   
-  }
-
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController, public storageCrtl: Storage, private networkCtrl: Network, platform: Platform, public alertCtrl: AlertController,
-    public conexion: ConexionProvider, public http: Http) {
-    this.obtenerDatos();
-    this.obtenerRegistros();
-    this.obtenerEntradas();
-    this.obtenerSalidas();
-    this.fecha = moment().format('LL');
-    Observable.interval(1000).subscribe(() => {
-      this.horaActual();
-    });
-    platform.registerBackButtonAction(fn => {
-      let alert = this.alertCtrl.create({
-        title: 'Salir de EquateClock',
-        subTitle: 'Desea salir de EquateClock',
-        buttons: [
-          {
-            text: 'Continuar',
-            role: 'Continuar',
-            handler: () => {
-              platform.exitApp();
-            }
-          },
-          {
-            text: 'Cancelar',
-          }
-        ]
-      });
-      alert.present();
     })
   }
-  
+
   obtenerEntradas() {
     this.storageCrtl.ready().then(() => {
       this.storageCrtl.get("entradas").then(data => {
@@ -107,17 +70,44 @@ export class HomePage {
     })
   }
 
-  configuracion(){
-  this.navCtrl.push(AdministradorPage);
+  constructor(public navCtrl: NavController, public navParams: NavParams, public storageCrtl: Storage, public alertCtrl: AlertController,
+    public conexion: ConexionProvider, public http: Http, private networkCtrl: Network, public loadingCtrl: LoadingController) {
+       this.obtenerDatos();
+       this.obtenerRegistros();
   }
-  
-horaActual(){
-  this.hora = moment().format('hh:mm ss a');    
-  if (this.hora == '05:07 00 pm'){
-   this.empleados();
-     }
-}
 
+ 
+  remover(){
+      const confirm = this.alertCtrl.create({
+        title: 'Desea eliminar todos los registro?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: () => {
+            }
+          },
+          {
+            text: 'Confirmar',
+            handler: () => {
+              this.storageCrtl.clear();
+              this.navCtrl.push(VerificacionPage);
+            }
+          }
+        ]
+      });
+      confirm.present();
+    }
+
+    sincronizar(){
+        const loader = this.loadingCtrl.create({
+          content: "Sincronizando",
+          duration: 3000
+        });
+      this.empleados();
+      this.obtenerEntradas();
+      this.obtenerSalidas();
+      loader.present();
+    }
 
   empleados() {
     let direccion = this.conexion.Url + "empleados/compania/" + this.companiaid + "/sucursal/" + this.clienteId;
@@ -128,30 +118,37 @@ horaActual(){
       })
   }
 
-
-
   sincronizarEntrada() {
     this.TipoConexion = this.networkCtrl.type;
     if (this.TipoConexion != 'null') {
       if (this.datosEntradas.length > 0) {
         let cont = 0;
-        for(let item of this.datosEntradas) {
-           let verificar = this.conexion.Url + "tiempo/empleado/" + item.empleadoId;
-           this.http.get(verificar)
+        for (let item of this.datosEntradas) {
+          let verificar = this.conexion.Url + "tiempo/empleado/" + item.empleadoId;
+          this.http.get(verificar)
             .map(res => res.json())
             .subscribe(respuesta => {
-             if(!respuesta && item.estado == 'noEnviado'){
-               let direccion = this.conexion.Url + "tiempo/empleado/";
-               this.http.post(direccion, item.entrada)
-              .subscribe(respuesta => {       
-               })
-            }
-           })
-          this.actualizarRegistros(cont);  
+              if (!respuesta && item.estado == 'noEnviado') {
+                let direccion = this.conexion.Url + "tiempo/empleado/";
+                this.http.post(direccion, item.entrada)
+                  .subscribe(respuesta => {
+                  })
+              }
+            })
+          this.actualizarRegistros(cont);
           cont++
         }
-      } 
+      }
     }
+  }
+
+  actualizarRegistros(numero) {
+    this.storageCrtl.ready().then(() => {
+      this.storageCrtl.get("entradas").then(data => {
+        data[numero]['estado'] = 'enviado';
+        this.storageCrtl.set("entradas", data)
+      })
+    })
   }
 
   sincronizarSalida() {
@@ -164,33 +161,23 @@ horaActual(){
             .subscribe(respuesta => {
               let valor = respuesta.json;
             })
-          this.eliminarEntradas(items2.empleadoId); 
-          this.eliminarSalidas(items2.empleadoId); 
+          this.eliminarEntradas(items2.empleadoId);
+          this.eliminarSalidas(items2.empleadoId);
         }
       }
     }
   }
 
-
-  actualizarRegistros(numero){
+  eliminarEntradas(empleadoId) {
     this.storageCrtl.ready().then(() => {
       this.storageCrtl.get("entradas").then(data => {
-      data[numero]['estado'] = 'enviado';
-      this.storageCrtl.set("entradas", data)
-      })
-    })
-  }
-
-  eliminarEntradas(empleadoId){
-    this.storageCrtl.ready().then(() => {
-    this.storageCrtl.get("entradas").then(data => {   
-      let nuevosEntradas = [];
-        for(let items of data){
-          if(items.empleadoId != empleadoId){
+        let nuevosEntradas = [];
+        for (let items of data) {
+          if (items.empleadoId != empleadoId) {
             nuevosEntradas.push(items)
           }
         }
-      this.storageCrtl.set("entradas", nuevosEntradas)
+        this.storageCrtl.set("entradas", nuevosEntradas)
       })
     })
   }
@@ -209,12 +196,12 @@ horaActual(){
     })
   }
 
-  irPin(){
-    this.navCtrl.push(PinPage);
+  irEmpleados(){
+    this.navCtrl.push(ConfiguracionPage);
   }
-   
-  irScanner(){
-    this.navCtrl.push(CodigoQrPage);
+
+  salir(){
+    this.navCtrl.push(HomePage);
   }
 
 }

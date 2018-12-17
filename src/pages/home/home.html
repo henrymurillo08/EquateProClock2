@@ -34,3 +34,25 @@
     <label>{{salidas}}</label>
   </div>
 </ion-content>
+
+<ion-footer>
+  <ion-grid text-center>
+    <ion-row>
+      <ion-col>
+        <button ion-button round outline>
+          <ion-icon name="home"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+      <button ion-button round outline>
+        <ion-icon name="apps" (click)="irPin()"></ion-icon>
+      </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button round outline>
+          <ion-icon name="qr-scanner" (click)="irScanner()"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+      </ion-grid>
+</ion-footer>

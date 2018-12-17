@@ -9,12 +9,8 @@ import { CodigoQrPage } from '../codigo-qr/codigo-qr';
 })
 export class TabsPage {
 
-  conta = 0;
-  tab1Root = HomePage;
-  tab2Root = PinPage;
-  tab3Root = CodigoQrPage;
-
   constructor() {
+    
   }
 
 }

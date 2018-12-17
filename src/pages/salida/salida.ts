@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
-import { TabsPage } from '../tabs/tabs';
+import { HomePage } from '../home/home';
 
 @IonicPage()
 @Component({
@@ -22,7 +22,7 @@ export class SalidaPage {
 
   ngOnInit(){
     setTimeout(() => {
-      this.navCtrl.push(TabsPage);
+      this.navCtrl.push(HomePage);
     }, 3000);
   }
 

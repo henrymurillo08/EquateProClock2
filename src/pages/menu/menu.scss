@@ -1,0 +1,42 @@
+page-menu {
+
+    .item-md p {
+        font-size: 3.4rem;
+    }
+
+    .toolbar-title-md {
+        font-size: 50px; 
+    }
+    p { 
+        font-size: 40px;
+    }
+
+    .searchbar-md .searchbar-input {
+        font-size: 3.6rem;    
+    }
+
+    .button-round-md {
+        border-radius: 64px;
+        padding: 0 20rem;
+    }
+
+    .button-md {
+        height: 7rem;
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    ion-list {
+        padding-top: 15em;
+        }
+
+    ion-footer .button-outline-md {
+        color: white;
+        background-color: red;
+}
+
+    ion-footer .button-round-md {
+        padding: 0 7rem;
+}
+
+}

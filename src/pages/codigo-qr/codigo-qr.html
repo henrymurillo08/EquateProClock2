@@ -10,3 +10,24 @@
 <ion-content padding>
 <button ion-button block color="secondary" (click)="escanearQR()">Escaneo de QR</button>
 </ion-content>
+<ion-footer>
+  <ion-grid text-center>
+    <ion-row>
+      <ion-col>
+        <button ion-button round outline>
+          <ion-icon name="home" (click)="irHome()"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button round outline>
+          <ion-icon name="apps"  (click)="irPin()"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button round outline>
+          <ion-icon name="qr-scanner"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

@@ -11,6 +11,8 @@ import { EntradaPage } from '../entrada/entrada';
 import { SalidaPage } from '../salida/salida';
 import { HomePage } from '../home/home';
 import { isTrueProperty } from 'ionic-angular/umd/util/util';
+import { CodigoQrPage } from '../codigo-qr/codigo-qr';
+import { HtmlParser } from '@angular/compiler';
 
 
 @IonicPage()
@@ -24,7 +26,7 @@ export class PinPage {
   public n2: any;
   public n3: any;
   public n4: any;
-  public conta:any;
+  public conta = 0;
   public entradas:any;
   public salidas:any;
   public keys:any;
@@ -136,14 +138,12 @@ export class PinPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
     public toastCtrl: ToastController, public camara: Camera, public alertCtrl: AlertController,private geolocation: Geolocation, public platform: Platform,
     public storage: Storage, public modalCtrl: ModalController) {
-    this.conta = this.navParams.data;
     this.obtenerDispositivo();
     this.obtenerEmpleados();
     this.obtenerRegistros();
     this.obtenerEntradas();
     this.obtenerSalidas();
     console.log(this.conta);
-
     platform.registerBackButtonAction(fn => {
       this.navCtrl.push(HomePage);
     })
@@ -156,24 +156,21 @@ export class PinPage {
       var element = <HTMLInputElement>document.getElementById("primero");
        element.checked = true;
     }
-
-    if (this.conta == 2) {
+    else if (this.conta == 2) {
       this.n2 = "" + valor;
       var element = <HTMLInputElement>document.getElementById("segundo");
       element.checked = true;
     }
-
-    if (this.conta == 3) {
+    else if (this.conta == 3) {
       this.n3 = "" + valor;
       var element = <HTMLInputElement>document.getElementById("tercero");
       element.checked = true;
     }
-
-    if (this.conta == 4) {
+    else if (this.conta == 4) {
       this.n4 = "" + valor;
       var element = <HTMLInputElement>document.getElementById("cuarto");
       element.checked = true;
-      this.Login()
+      this.Login();
     }
   }
 
@@ -343,6 +340,14 @@ export class PinPage {
   presentModal(pantalla) {
     const modal = this.modalCtrl.create(pantalla,{empleado:this.nombre, estado:this.estado, hora:this.horacorta});
     modal.present();
+  }
+
+  irHome() {
+    this.navCtrl.push(HomePage);
+  }
+
+  irScanner() {
+    this.navCtrl.push(CodigoQrPage);
   }
 
 }

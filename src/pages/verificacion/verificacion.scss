@@ -10,108 +10,14 @@ page-verificacion {
 		padding-bottom: 30px;
  }
 
-	#custom-overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 100000;
-  width:100%;
-  background-color: #002a3e;
+input[type="radio"] {
+    height: 30px;
+    width: 60px;
 }
 
-.background{
-background-image: url('../../assets/imgs/imagen.jpeg');
-
+ 	ion-icon {
+    display: inline-block;
+    font-size: 0.8em;
 }
-
-.Aligner-item {
-  max-width: 50%;
-}
-.Aligner-item--top {
-  align-self: flex-start;
-}
-.Aligner-item--bottom {
-  align-self: flex-end;
-}
-#custom-overlay img {
-  display: block;
-  margin: 0 auto;
-  width: 50%;
-  height: auto;
-  animation: animation 3100ms linear infinite both;
-  animation-delay: 1s;
-}
-	  
-	  #numbers {
-		max-width: 700px;
-		padding: 0 20px;
-    margin-left: 70px;
-		position: relative;
-		display: block;
-		-webkit-transition: all 1s ease-out;
-		-moz-transition: all 1s ease-out;
-		transition: all 1s ease-out;
-		opacity: 1;
-	  }
-	  
-	  #numbers.hide {
-		opacity: 0.3;
-	  }
-	  
-	  #pincode button {
-		width: 50px;
-		height: 140px;
-		margin-bottom: 10px;
-		background-color: transparent;
-		border: 0;
-		color: #005792;
-		font-size: 65px;
-		line-height: 50px;
-		border-radius: 100%;
-		opacity: 1;
-		outline: 0;
-		border: 2px solid #005792;
-	  }
-	  
-	  #pincode button:active {
-		background-color: #13334c;
-		outline: 0;
-	  }
-	  
-	  #fields {
-		max-width: 500px;
-		padding: 30px 40px;
-		margin: 20px auto;
-		position: relative;
-		display: block;
-	  }
-	  
-	  #fields .numberfield {
-		text-align: center;
-	  }
-	  
-	  #fields .numberfield span {
-		height: 20px;
-		width: 20px;
-		border: 2px solid #005792;
-		background-color: transparent;
-		border-radius: 100%;
-		position: relative;
-		display: inline-block;
-		text-align: center;
-	  }
-	  
-	  #fields .numberfield.active span {
-		background-color: #005792;
-	  }
-	  
-	  #fields .numberfield.right span {
-		background-color: #272a2f;
-		border-color: #272a2f;
-		transition: all .5s ease-in-out;
-		-webkit-transition: all .5s ease-in-out;
-		}
  
 }

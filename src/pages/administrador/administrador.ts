@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import { ConfiguracionPage } from '../configuracion/configuracion';
 import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { MenuPage } from '../menu/menu';
 
 @IonicPage()
 @Component({
@@ -34,7 +35,7 @@ export class AdministradorPage {
 
   loguear(){
     if(this.User == this.usuario && this.Contrasena == this.pass){
-      this.navCtrl.push(ConfiguracionPage);
+      this.navCtrl.push(MenuPage);
     }else{
       let err = "El usuario o la contraseña son incorrectos";
       this.MostarToast(err);

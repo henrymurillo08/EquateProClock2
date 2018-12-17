@@ -18,5 +18,25 @@ page-pin {
     height: 30px;
     width: 60px;
 }
-	
+ ion-footer .button-round-md {
+        padding: 4rem;
+        border: 0;
+}
+    ion-footer .button-md {
+         height: 7rem;
+}
+
+   ion-footer .button-outline-md {
+         color: #ffffff;
+}
+
+    ion-footer {
+     background-color: #005792
+}
+
+ion-footer ion-icon {
+    font-size: 1.2em;
+}
+
+
 }

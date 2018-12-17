@@ -11,11 +11,11 @@
 <ion-content padding>
   <p ion-text text-center text-uppercase color="primary">Ingrese su codigo de 4 digitos <br /></p>
 
-  <div text-center margin-vertical>
-    <input color="primary" id="primero" type="radio"/>
-    <input color="primary" id="segundo" type="radio" />
-    <input color="primary" id="tercero" type="radio" />
-    <input color="primary" id="cuarto" type="radio" />
+  <div text-center margin-vertical style="margin-bottom: 60px;">
+    <input color="primary" id="primero" type="radio" disabled />
+    <input color="primary" id="segundo" type="radio" disabled />
+    <input color="primary" id="tercero" type="radio" disabled />
+    <input color="primary" id="cuarto" type="radio" disabled />
   </div>
 
   <ion-grid text-center>
@@ -64,3 +64,24 @@
   </ion-grid>
 
 </ion-content>
+<ion-footer>
+  <ion-grid text-center>
+    <ion-row>
+      <ion-col>
+        <button ion-button round outline>
+          <ion-icon name="home" (click)="irHome()"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button round outline>
+          <ion-icon name="apps" ></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button round outline>
+          <ion-icon name="qr-scanner" (click)="irScanner()"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
