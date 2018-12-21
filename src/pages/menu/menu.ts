@@ -104,6 +104,7 @@ export class MenuPage {
           duration: 3000
         });
       this.empleados();
+      this.cliente();
       this.obtenerEntradas();
       this.obtenerSalidas();
       loader.present();
@@ -115,6 +116,15 @@ export class MenuPage {
       .map(resp => resp.json())
       .subscribe(data => {
         this.storageCrtl.set('empleados', data);
+      })
+  }
+
+  cliente() {
+    let direccion = this.conexion.Url + "clientes/" + this.clienteId;
+    this.http.get(direccion)
+      .map(resp => resp.json())
+      .subscribe(data => {
+        this.storageCrtl.set('sucursal', data);
       })
   }
 

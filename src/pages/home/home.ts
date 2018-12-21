@@ -35,6 +35,7 @@ export class HomePage {
         this.nombre_empresa = data.dispositivo;
         this.companiaid = data.companiaId
         this.clienteId = data.clienteId
+        this.cliente();
       })
     })   
   }
@@ -57,6 +58,7 @@ export class HomePage {
       })
     })   
   }
+
 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public storageCrtl: Storage, private networkCtrl: Network, platform: Platform, public alertCtrl: AlertController,
     public conexion: ConexionProvider, public http: Http) {
@@ -127,6 +129,16 @@ horaActual(){
         this.storageCrtl.set('empleados', data);
       })
   }
+
+  cliente() {
+    let direccion = this.conexion.Url + "clientes/" + this.clienteId;
+    this.http.get(direccion)
+      .map(resp => resp.json())
+      .subscribe(data => {
+        this.storageCrtl.set('sucursal', data);
+      })
+  }
+
 
 
 

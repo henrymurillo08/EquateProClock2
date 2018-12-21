@@ -47,6 +47,7 @@ export class PinPage {
   public nombre:any; 
   public dispositivoId:any;
   public dispositivoNombre:any;
+  public fotoSucursal:any;
   public entrada = {
     creadoFecha: "",
     creadoPor: "",
@@ -102,6 +103,14 @@ export class PinPage {
     })
   }
 
+  datosSucursal() {
+    this.storage.ready().then(() => {
+      this.storage.get("sucursal").then(data => {
+        this.fotoSucursal = data.siempreCapturaFoto;
+      })
+    })
+  }
+
   obtenerEmpleados() {
     this.storage.ready().then(() => {
       this.storage.get("empleados").then(data => {
@@ -140,6 +149,7 @@ export class PinPage {
     public storage: Storage, public modalCtrl: ModalController) {
     this.obtenerDispositivo();
     this.obtenerEmpleados();
+    this.datosSucursal();
     this.obtenerRegistros();
     this.obtenerEntradas();
     this.obtenerSalidas();
@@ -212,7 +222,7 @@ export class PinPage {
          }        
       }
       if(verificar == 1){
-            if(this.tomafoto == true){
+            if(this.fotoSucursal == true || this.tomafoto == true){
              this.getPicture();
             }else{
             this.guardarEntrada();
@@ -323,9 +333,9 @@ export class PinPage {
   getPicture(){
     let options: CameraOptions = {
       destinationType: this.camara.DestinationType.DATA_URL,
-      targetWidth: 400,
-      targetHeight: 400,
-      quality: 50
+      targetWidth: 200,
+      targetHeight: 200,
+      quality: 100
     }
     this.camara.getPicture( options )
     .then(imageData => {
